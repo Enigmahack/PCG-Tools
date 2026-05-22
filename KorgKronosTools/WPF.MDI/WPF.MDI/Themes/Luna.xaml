@@ -146,14 +146,14 @@
                             <ContentControl Content="{TemplateBinding Content}" />
                         </Border>
 
-                        <Thumb Name="ResizeLeft" Width="6" Margin="0,6,0,6" HorizontalAlignment="Left" Cursor="SizeWE" Opacity="0" IsHitTestVisible="{TemplateBinding Resizable}" />
-                        <Thumb Name="ResizeTop" Height="4" Margin="6,0,6,0" VerticalAlignment="Top" Cursor="SizeNS" Opacity="0" IsHitTestVisible="{TemplateBinding Resizable}" />
-                        <Thumb Name="ResizeRight" Width="6" Margin="0,6,0,6" HorizontalAlignment="Right" Cursor="SizeWE" Opacity="0" IsHitTestVisible="{TemplateBinding Resizable}" />
-                        <Thumb Name="ResizeBottom" Height="6" Margin="6,0,6,0" VerticalAlignment="Bottom" Cursor="SizeNS" Opacity="0" IsHitTestVisible="{TemplateBinding Resizable}" />
-                        <Thumb Name="ResizeTopLeft" Width="6" Height="6" HorizontalAlignment="Left" VerticalAlignment="Top" Cursor="SizeNWSE" Opacity="0" IsHitTestVisible="{TemplateBinding Resizable}" />
-                        <Thumb Name="ResizeTopRight" Width="6" Height="6" HorizontalAlignment="Right" VerticalAlignment="Top" Cursor="SizeNESW" Opacity="0" IsHitTestVisible="{TemplateBinding Resizable}" />
-                        <Thumb Name="ResizeBottomRight" Width="6" Height="6" HorizontalAlignment="Right" VerticalAlignment="Bottom" Cursor="SizeNWSE" Opacity="0" IsHitTestVisible="{TemplateBinding Resizable}" />
-                        <Thumb Name="ResizeBottomLeft" Width="6" Height="6" HorizontalAlignment="Left" VerticalAlignment="Bottom" Cursor="SizeNESW" Opacity="0" IsHitTestVisible="{TemplateBinding Resizable}" />
+                        <Thumb Name="ResizeLeft" Width="6" Margin="0,6,0,6" HorizontalAlignment="Left" Background="Transparent" Cursor="SizeWE" Opacity="0" IsHitTestVisible="{TemplateBinding Resizable}" />
+                        <Thumb Name="ResizeTop" Height="4" Margin="6,0,6,0" VerticalAlignment="Top" Background="Transparent" Cursor="SizeNS" Opacity="0" IsHitTestVisible="{TemplateBinding Resizable}" />
+                        <Thumb Name="ResizeRight" Width="6" Margin="0,6,0,6" HorizontalAlignment="Right" Background="Transparent" Cursor="SizeWE" Opacity="0" IsHitTestVisible="{TemplateBinding Resizable}" />
+                        <Thumb Name="ResizeBottom" Height="6" Margin="6,0,6,0" VerticalAlignment="Bottom" Background="Transparent" Cursor="SizeNS" Opacity="0" IsHitTestVisible="{TemplateBinding Resizable}" />
+                        <Thumb Name="ResizeTopLeft" Width="6" Height="6" HorizontalAlignment="Left" VerticalAlignment="Top" Background="Transparent" Cursor="SizeNWSE" Opacity="0" IsHitTestVisible="{TemplateBinding Resizable}" />
+                        <Thumb Name="ResizeTopRight" Width="6" Height="6" HorizontalAlignment="Right" VerticalAlignment="Top" Background="Transparent" Cursor="SizeNESW" Opacity="0" IsHitTestVisible="{TemplateBinding Resizable}" />
+                        <Thumb Name="ResizeBottomRight" Width="6" Height="6" HorizontalAlignment="Right" VerticalAlignment="Bottom" Background="Transparent" Cursor="SizeNWSE" Opacity="0" IsHitTestVisible="{TemplateBinding Resizable}" />
+                        <Thumb Name="ResizeBottomLeft" Width="6" Height="6" HorizontalAlignment="Left" VerticalAlignment="Bottom" Background="Transparent" Cursor="SizeNESW" Opacity="0" IsHitTestVisible="{TemplateBinding Resizable}" />
                     </Grid>
                     <ControlTemplate.Triggers>
                 		<Trigger SourceName="CloseButton" Property="IsMouseOver" Value="True">

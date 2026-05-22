@@ -635,6 +635,17 @@ namespace PcgTools.Model.Common.Synth.Meta
         }
 
 
+        // Display columns only defined on certain patch types; others return null so XAML bindings resolve silently.
+        public virtual string Favorite => null;
+        public virtual string CategoryAsName => null;
+        public virtual string SubCategoryAsName => null;
+        public virtual string NumberOfReferencesAsString => null;
+        public virtual string Reference => null;
+        public virtual string ProgramCombiName => null;
+        public virtual string VolumeAsString => null;
+        public virtual string DescriptionInList => null;
+
+
         /// <summary>
         /// Change all references to the current patch, towards the specified patch.
         /// </summary>

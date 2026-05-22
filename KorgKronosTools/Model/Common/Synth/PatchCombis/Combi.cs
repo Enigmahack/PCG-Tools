@@ -174,7 +174,7 @@ namespace PcgTools.Model.Common.Synth.PatchCombis
         /// </summary>
         [UsedImplicitly]
         // ReSharper disable UnusedMember.Global
-        public string Favorite => (((IBank) (Parent)).IsLoaded &&
+        public override string Favorite => (((IBank) (Parent)).IsLoaded &&
                                    Root.AreFavoritesSupported &&
                                    GetParam(ParameterNames.CombiParameterName.Favorite).Value)
             ? "X"
@@ -193,12 +193,14 @@ namespace PcgTools.Model.Common.Synth.PatchCombis
         /// </summary>
         [UsedImplicitly]
         // ReSharper disable UnusedMember.Global
-        public string NumberOfReferencesAsString
+        public override string NumberOfReferencesAsString
             // ReSharper restore UnusedMember.Global
             => Settings.Default.UI_ShowNumberOfReferencesColumn
                 ? NumberOfReferences.ToString(CultureInfo.InvariantCulture)
                 : string.Empty;
 
+
+        private int _cachedNumberOfReferences = -1;
 
         /// <summary>
         /// Count number of reference (program used by combis or set list slots.
@@ -207,6 +209,8 @@ namespace PcgTools.Model.Common.Synth.PatchCombis
         {
             get
             {
+                if (_cachedNumberOfReferences >= 0) return _cachedNumberOfReferences;
+
                 var numberOfReferences = 0;
 
                 if (PcgRoot.SetLists != null)
@@ -223,7 +227,8 @@ namespace PcgTools.Model.Common.Synth.PatchCombis
                     }
                 }
 
-                return numberOfReferences;
+                _cachedNumberOfReferences = numberOfReferences;
+                return _cachedNumberOfReferences;
             }
         }
 
@@ -231,7 +236,7 @@ namespace PcgTools.Model.Common.Synth.PatchCombis
         /// <summary>
         /// 
         /// </summary>
-        public string CategoryAsName
+        public override string CategoryAsName
         {
             get
             {
@@ -254,7 +259,7 @@ namespace PcgTools.Model.Common.Synth.PatchCombis
         /// <summary>
         /// 
         /// </summary>
-        public string SubCategoryAsName
+        public override string SubCategoryAsName
         {
             get
             {

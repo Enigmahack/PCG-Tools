@@ -953,7 +953,7 @@ namespace PcgTools.ClipBoard
                             // When pasting to the same file, then it is not wanted to fix references,
                             // because a duplicate program/combi can exist before the original reference 
                             // so it will be changed unnecessarily.
-                            if (program.OriginalLocation.Root != PastePcgMemory)
+                            if (program.OriginalLocation != null && program.OriginalLocation.Root != PastePcgMemory)
                             {
                                 ((ICombi)(combi.PasteDestination)).Timbres.TimbresCollection[timbreIndex].UsedProgram =
                                     (IProgram) program.PasteDestination;
@@ -990,9 +990,9 @@ namespace PcgTools.ClipBoard
                         if ((drumKit.PasteDestination != null) && (program.PasteDestination != null))
                         {
                             // When pasting to the same file, then it is not wanted to fix references,
-                            // because a duplicate drumkit/program can exist before the original reference 
+                            // because a duplicate drumkit/program can exist before the original reference
                             // so it will be changed unnecessarily.
-                            if (drumKit.OriginalLocation.Root != PastePcgMemory)
+                            if (drumKit.OriginalLocation != null && drumKit.OriginalLocation.Root != PastePcgMemory)
                             {
                                 var changes = new Dictionary<IDrumKit, IDrumKit>
                                 {

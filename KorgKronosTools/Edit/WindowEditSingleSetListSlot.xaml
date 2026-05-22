@@ -34,7 +34,7 @@
             		    Margin="4" Padding="4" x:Name="expanderName" IsExpanded="True">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock HorizontalAlignment="Left" Margin="4" Text="(x of y characters)" Background="{x:Static SystemColors.ControlLightBrush}"
+                        <TextBlock HorizontalAlignment="Left" Margin="4" Text="(x of y characters)" Background="Transparent"
                             Name="labelNameLength" VerticalAlignment="Top"/>
                     </StackPanel>
                 
@@ -42,7 +42,7 @@
                         Margin="4" Name="textBoxName" MinWidth="30"
                         VerticalAlignment="Top" TextChanged="TextBoxNameTextChanged" />
 
-                    <Label Foreground="#D80000" HorizontalAlignment="Left" 
+                    <Label Foreground="{StaticResource Brush.TextError}" HorizontalAlignment="Left" 
                         Margin="4" Name="labelErrorName" 
                         VerticalAlignment="Top">
                         <Label.Background>
@@ -212,7 +212,7 @@
                                  Checked="RadioButtonTextSize_Checked"/>
                 </StackPanel>
                 <StackPanel>
-                    <TextBlock HorizontalAlignment="Left" Margin="4" Background="{x:Static SystemColors.ControlLightBrush}"
+                    <TextBlock HorizontalAlignment="Left" Margin="4" Background="Transparent"
                                Text="(x of y characters)"
                        Name="labelDescriptionLength" VerticalAlignment="Top"/>
 
@@ -223,7 +223,7 @@
                          TextChanged="TextBoxDescriptionTextChanged" AcceptsReturn="True" AcceptsTab="True" FontWeight="Bold" 
                              FontFamily="Arial"/>
 
-                    <Label Foreground="#D80000" HorizontalAlignment="Left" 
+                    <Label Foreground="{StaticResource Brush.TextError}" HorizontalAlignment="Left" 
                         Margin="4" Name="labelErrorDescription" 
                         VerticalAlignment="Top">
                         <Label.Background>

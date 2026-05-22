@@ -4,40 +4,36 @@
         Topmost="True" 
         Icon="/PcgTools;component/Gui/pcgtools.ico" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" WindowStyle="None" Focusable="False" 
         SizeToContent="WidthAndHeight">
-    <StackPanel >
-        <StackPanel.Background>
-            <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
-                <GradientStop Color="#FFF58C0D" Offset="1"/>
-                <GradientStop Color="Black"/>
-            </LinearGradientBrush>
-        </StackPanel.Background>
-        <!--Rectangle Fill="#FF00004F" Height="333"   HorizontalAlignment="Left" RadiusX="20" RadiusY="20" Stroke="Black"
-                   StrokeThickness="5" VerticalAlignment="Top" Width="377" Panel.ZIndex="-1"/-->
+    <Border Background="#FF1E1E1E" BorderBrush="#FF007ACC" BorderThickness="1">
+        <StackPanel>
+            <Image HorizontalAlignment="Left" Name="imageDonator" Stretch="Fill" VerticalAlignment="Top" Width="350"
+                   Source="/PcgTools;component/Gui/Images/pcgtoolsnormal.jpg" Margin="0"/>
 
-        <Image  HorizontalAlignment="Left" Name="imageDonator" Stretch="Fill" VerticalAlignment="Top"  Width="350"
-               Source="/PcgTools;component/Gui/Images/pcgtoolsnormal.jpg" Margin="4" />
-
-        <StackPanel Orientation="Horizontal">
-            <Label Content="{Binding Version, Source={StaticResource LocStrings}}" HorizontalAlignment="Left" 
-                   Margin="4"  VerticalAlignment="Top" Foreground="White"/>
-            <Label Content="&lt;x.y.z&gt;" Foreground="White" HorizontalAlignment="Left" Margin="4"
-                   VerticalAlignment="Top" Name="labelVersion" />
-            <Label Content="(c) 2011-2019" HorizontalAlignment="Left" Margin="4" VerticalAlignment="Top" Foreground="White" />
+            <Border Background="#FF252526" Padding="8,6">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Version, Source={StaticResource LocStrings}}"
+                                       Foreground="#FF9D9D9D" VerticalAlignment="Center"/>
+                            <TextBlock Name="labelVersion" Text="&lt;x.y.z&gt;"
+                                       Foreground="#FFCCCCCC" Margin="6,0,0,0" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                        </StackPanel>
+                        <TextBlock Text="{Binding DevelopedBy, Source={StaticResource LocStrings}}"
+                                   Foreground="#FF9D9D9D" Margin="0,4,0,0"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
+                            <TextBlock Text="{Binding SponsoredBy, Source={StaticResource LocStrings}}"
+                                       Foreground="#FF9D9D9D"/>
+                            <TextBlock Name="labelSponsorName" Text="&lt;Sponsor name&gt;"
+                                       Foreground="#FFCCCCCC" Margin="4,0,0,0"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <Image Grid.Column="1" Margin="8,0,0,0" Name="image" Stretch="Fill"/>
+                </Grid>
+            </Border>
         </StackPanel>
-
-        <Label Content="{Binding DevelopedBy, Source={StaticResource LocStrings}}" 
-               Margin="4" VerticalAlignment="Top" Foreground="White" 
-               HorizontalAlignment="Left"/>
-
-        <StackPanel Orientation="Horizontal">
-            <Label Content="{Binding SponsoredBy, Source={StaticResource LocStrings}}" Foreground="White" 
-                   HorizontalAlignment="Left" Margin="4" VerticalAlignment="Top" />
-            <Label Content="&lt;Sponsor name&gt;" Foreground="White" HorizontalAlignment="Left" 
-                   Margin="4" Name="labelSponsorName" VerticalAlignment="Top" />
-        </StackPanel>
-
-        <Image Margin="4" Name="image" Stretch="Fill" />
-
-
-    </StackPanel>
+    </Border>
 </Window>

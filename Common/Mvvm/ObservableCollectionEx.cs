@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -63,7 +64,31 @@ namespace Common.Mvvm
 
 
         /// <summary>
-        /// 
+        /// Replaces all items in one operation and fires a single Reset notification
+        /// instead of one notification per item, avoiding O(n²) layout work in WPF.
+        /// </summary>
+        public void ReplaceAll(IEnumerable<T> newItems)
+        {
+            CheckReentrancy();
+            foreach (var item in this)
+                item.PropertyChanged -= ContainedElementChanged;
+            Items.Clear();
+            if (newItems != null)
+            {
+                foreach (var item in newItems)
+                {
+                    Items.Add(item);
+                    item.PropertyChanged += ContainedElementChanged;
+                }
+            }
+            OnPropertyChanged(new PropertyChangedEventArgs("Count"));
+            OnPropertyChanged(new PropertyChangedEventArgs("Item[]"));
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+        }
+
+
+        /// <summary>
+        ///
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

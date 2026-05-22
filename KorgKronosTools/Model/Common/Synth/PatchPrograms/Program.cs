@@ -94,7 +94,7 @@ namespace PcgTools.Model.Common.Synth.PatchPrograms
         /// </summary>
         [UsedImplicitly]
         // ReSharper disable once UnusedMember.Global
-        public string Favorite => Root.AreFavoritesSupported && GetParam(ParameterNames.ProgramParameterName.Favorite).Value ? "X" : string.Empty;
+        public override string Favorite => Root.AreFavoritesSupported && GetParam(ParameterNames.ProgramParameterName.Favorite).Value ? "X" : string.Empty;
 
 
         /// <summary>
@@ -109,12 +109,14 @@ namespace PcgTools.Model.Common.Synth.PatchPrograms
         /// </summary>
         [UsedImplicitly]
         // ReSharper disable UnusedMember.Global
-        public string NumberOfReferencesAsString
+        public override string NumberOfReferencesAsString
             // ReSharper restore UnusedMember.Global
             => Settings.Default.UI_ShowNumberOfReferencesColumn
                 ? NumberOfReferences.ToString(CultureInfo.InvariantCulture)
                 : string.Empty;
 
+
+        private int _cachedNumberOfReferences = -1;
 
         /// <summary>
         /// Count number of reference (program used by combis or set list slots.
@@ -123,6 +125,8 @@ namespace PcgTools.Model.Common.Synth.PatchPrograms
         {
             get
             {
+                if (_cachedNumberOfReferences >= 0) return _cachedNumberOfReferences;
+
                 var numberOfReferences = 0;
 
                 if (PcgRoot.CombiBanks != null)
@@ -154,7 +158,8 @@ namespace PcgTools.Model.Common.Synth.PatchPrograms
                     }
                 }
 
-                return numberOfReferences;
+                _cachedNumberOfReferences = numberOfReferences;
+                return _cachedNumberOfReferences;
             }
         }
 
@@ -162,7 +167,7 @@ namespace PcgTools.Model.Common.Synth.PatchPrograms
         /// <summary>
         /// 
         /// </summary>
-        public string CategoryAsName
+        public override string CategoryAsName
         {
             get
             {
@@ -199,7 +204,7 @@ namespace PcgTools.Model.Common.Synth.PatchPrograms
         /// <summary>
         /// 
         /// </summary>
-        public string SubCategoryAsName
+        public override string SubCategoryAsName
         {
             get
             {
@@ -562,11 +567,15 @@ namespace PcgTools.Model.Common.Synth.PatchPrograms
                 if (paramBank != null)
                 {
                     var bank = (IProgramBank) PcgRoot.ProgramBanks.GetBankWithPcgId((int) (paramBank.Value));
-
-                    var paramNumber = GetParam(ParameterNames.ProgramParameterName.DrumTrackProgramNumber);
-                    if (paramNumber != null)
+                    if (bank != null)
                     {
-                        return bank.Patches[paramNumber.Value];
+                        var paramNumber = GetParam(ParameterNames.ProgramParameterName.DrumTrackProgramNumber);
+                        if (paramNumber != null)
+                        {
+                            var idx = (int) paramNumber.Value;
+                            if (idx >= 0 && idx < bank.Patches.Count)
+                                return bank.Patches[paramNumber.Value];
+                        }
                     }
                 }
 
@@ -595,17 +604,21 @@ namespace PcgTools.Model.Common.Synth.PatchPrograms
         /// </summary>
         public IDrumPattern UsedDrumTrackPattern
         {
-            get 
+            get
             {
                 var paramBank = GetParam(ParameterNames.ProgramParameterName.DrumTrackCommonPatternBank);
                 if (paramBank != null)
                 {
                     var bank = (IDrumPatternBank) PcgRoot.DrumPatternBanks.GetBankWithPcgId((int) (paramBank.Value));
-
-                    var paramNumber = GetParam(ParameterNames.ProgramParameterName.DrumTrackCommonPatternNumber);
-                    if (paramNumber != null)
+                    if (bank != null)
                     {
-                        return bank.Patches[paramNumber.Value];
+                        var paramNumber = GetParam(ParameterNames.ProgramParameterName.DrumTrackCommonPatternNumber);
+                        if (paramNumber != null)
+                        {
+                            var idx = (int) paramNumber.Value;
+                            if (idx >= 0 && idx < bank.Patches.Count)
+                                return bank.Patches[paramNumber.Value];
+                        }
                     }
                 }
 

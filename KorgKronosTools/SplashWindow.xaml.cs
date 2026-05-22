@@ -51,8 +51,8 @@ namespace PcgTools
                 image.Width = ImagePixelArea / image.Height;
             }
 
-            labelVersion.Content = MainViewModel.Version;
-            labelSponsorName.Content = logo.Name;
+            labelVersion.Text = MainViewModel.Version;
+            labelSponsorName.Text = logo.Name;
         }
 
 

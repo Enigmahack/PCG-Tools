@@ -72,7 +72,10 @@ namespace PcgTools.Model.KronosSpecific.Synth
                         break;
 
                     case "- (EXI)":
-                        maxOsc = 0; // EXI do not have wave sequences
+                    case "Drums":
+                    case "Double Drums":
+                    case "- (Unused)":
+                        maxOsc = 0;
                         break;
 
                     default:

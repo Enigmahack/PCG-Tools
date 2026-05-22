@@ -14,10 +14,19 @@ namespace PcgTools
         
         void Application_Startup(object sender, StartupEventArgs e)
         {
+            // Apply dark background + Win32 dark title bar to every Window that opens in the app.
+            EventManager.RegisterClassHandler(
+                typeof(Window),
+                FrameworkElement.LoadedEvent,
+                new RoutedEventHandler(OnAnyWindowLoaded));
+
             if (e.Args.Length > 0)
-            {
                 Arguments = e.Args;
-            }
+        }
+
+        private static void OnAnyWindowLoaded(object sender, RoutedEventArgs e)
+        {
+            DarkModeHelper.Apply(sender as Window);
         }
 
         /// <summary>

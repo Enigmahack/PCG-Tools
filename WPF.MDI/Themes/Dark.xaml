@@ -1,0 +1,234 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:WPF.MDI;assembly=WPF.MDI">
+
+    <!-- Dark palette for MDI child windows -->
+    <SolidColorBrush x:Key="Mdi.TitleBar.Focused"    Color="#FF3C3C3C"/>
+    <SolidColorBrush x:Key="Mdi.TitleBar.Unfocused"  Color="#FF2D2D2D"/>
+    <SolidColorBrush x:Key="Mdi.TitleBar.AccentLine"  Color="#FF007ACC"/>
+    <SolidColorBrush x:Key="Mdi.Border.Focused"       Color="#FF007ACC"/>
+    <SolidColorBrush x:Key="Mdi.Border.Unfocused"     Color="#FF3F3F46"/>
+    <SolidColorBrush x:Key="Mdi.Content.Background"   Color="#FF1E1E1E"/>
+    <SolidColorBrush x:Key="Mdi.Text.Title"           Color="#FFCCCCCC"/>
+    <SolidColorBrush x:Key="Mdi.Text.TitleUnfocused"  Color="#FF888888"/>
+    <SolidColorBrush x:Key="Mdi.Button.Normal"        Color="Transparent"/>
+    <SolidColorBrush x:Key="Mdi.Button.Hover"         Color="#FF3E3E42"/>
+    <SolidColorBrush x:Key="Mdi.Button.CloseHover"    Color="#FFE81123"/>
+    <SolidColorBrush x:Key="Mdi.Button.Pressed"       Color="#FF007ACC"/>
+
+    <BooleanToVisibilityConverter x:Key="BoolToVisibility"/>
+
+    <!-- Flat window button style used for minimize/maximize -->
+    <Style x:Key="MdiWindowButtonStyle" TargetType="{x:Type Button}">
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="IsTabStop"           Value="False"/>
+        <Setter Property="Width"               Value="28"/>
+        <Setter Property="Height"              Value="22"/>
+        <Setter Property="Background"          Value="Transparent"/>
+        <Setter Property="Foreground"          Value="#FFCCCCCC"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="Bd" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource Mdi.Button.Hover}"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource Mdi.Button.Pressed}"/>
+                        </Trigger>
+                        <Trigger Property="Tag" Value="0">
+                            <Setter Property="Opacity" Value="0.5"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Close button gets red-on-hover -->
+    <Style x:Key="MdiCloseButtonStyle" TargetType="{x:Type Button}"
+           BasedOn="{StaticResource MdiWindowButtonStyle}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="Bd" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource Mdi.Button.CloseHover}"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="#FFCC0000"/>
+                        </Trigger>
+                        <Trigger Property="Tag" Value="0">
+                            <Setter Property="Opacity" Value="0.5"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Maximized state button style (in the host bar) -->
+    <Style x:Key="MdiMaxButtonStyle" TargetType="{x:Type Button}"
+           BasedOn="{StaticResource MdiWindowButtonStyle}">
+        <Setter Property="Width"  Value="18"/>
+        <Setter Property="Height" Value="18"/>
+    </Style>
+
+    <Style TargetType="{x:Type local:MdiChild}">
+        <Setter Property="Width"       Value="300"/>
+        <Setter Property="Height"      Value="300"/>
+        <Setter Property="MinWidth"    Value="150"/>
+        <Setter Property="MinHeight"   Value="35"/>
+        <Setter Property="Background"  Value="{StaticResource Mdi.Content.Background}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:MdiChild}">
+                    <!-- Outer border: accent when focused, subtle when not -->
+                    <Border x:Name="OuterBorder"
+                            BorderThickness="1" CornerRadius="3,3,0,0"
+                            BorderBrush="{StaticResource Mdi.Border.Focused}"
+                            Background="{StaticResource Mdi.TitleBar.Focused}">
+                        <Grid>
+                            <!-- Accent top stripe -->
+                            <Border x:Name="AccentStripe" Height="2" VerticalAlignment="Top"
+                                    CornerRadius="3,3,0,0"
+                                    Background="{StaticResource Mdi.TitleBar.AccentLine}"/>
+
+                            <!-- Drag handle over title bar -->
+                            <Thumb x:Name="DragThumb" Height="32" VerticalAlignment="Top" Opacity="0"/>
+
+                            <!-- Title bar row: icon + title + buttons -->
+                            <Grid x:Name="TitleRow" Height="30" VerticalAlignment="Top">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Icon -->
+                                <Image x:Name="IconImage" Grid.Column="0"
+                                       Width="16" Height="16" Margin="6,0,0,0"
+                                       Stretch="Fill"
+                                       RenderOptions.BitmapScalingMode="NearestNeighbor"
+                                       Source="{TemplateBinding Icon}"
+                                       Visibility="{TemplateBinding ShowIcon,
+                                                     Converter={StaticResource BoolToVisibility}}"/>
+
+                                <!-- Title text -->
+                                <TextBlock x:Name="TitleText" Grid.Column="1"
+                                           Text="{TemplateBinding Title}"
+                                           Foreground="{StaticResource Mdi.Text.Title}"
+                                           VerticalAlignment="Center" Margin="6,0,4,0"
+                                           TextTrimming="CharacterEllipsis"
+                                           TextWrapping="NoWrap"
+                                           FontSize="12" IsHitTestVisible="False"/>
+
+                                <!-- Window buttons -->
+                                <StackPanel Grid.Column="2" Orientation="Horizontal"
+                                            VerticalAlignment="Center" Margin="0,0,2,0">
+                                    <Button x:Name="MinimizeButton"
+                                            Style="{StaticResource MdiWindowButtonStyle}">
+                                        <Path Fill="{StaticResource Mdi.Text.Title}"
+                                              Width="10" Height="1" SnapsToDevicePixels="True"
+                                              Data="M 0 0 L 10 0" StrokeThickness="1.5"
+                                              Stroke="{StaticResource Mdi.Text.Title}"/>
+                                    </Button>
+                                    <Button x:Name="MaximizeButton"
+                                            Style="{StaticResource MdiWindowButtonStyle}">
+                                        <Path Fill="Transparent" StrokeThickness="1.5"
+                                              Stroke="{StaticResource Mdi.Text.Title}"
+                                              Width="10" Height="10"
+                                              Data="M 0 0 L 10 0 L 10 10 L 0 10 Z"/>
+                                    </Button>
+                                    <Button x:Name="CloseButton"
+                                            Style="{StaticResource MdiCloseButtonStyle}">
+                                        <Path Fill="Transparent" StrokeThickness="1.5"
+                                              Stroke="{StaticResource Mdi.Text.Title}"
+                                              Width="10" Height="10"
+                                              Data="M 0 0 L 10 10 M 10 0 L 0 10"/>
+                                    </Button>
+                                </StackPanel>
+                            </Grid>
+
+                            <!-- Content area -->
+                            <Border x:Name="ContentBorder"
+                                    Margin="1,31,1,1"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{StaticResource Mdi.Border.Unfocused}"
+                                    BorderThickness="0,1,0,0">
+                                <ContentControl Content="{TemplateBinding Content}"/>
+                            </Border>
+
+                            <!-- Resize handles (invisible, hit-test only) -->
+                            <Thumb x:Name="ResizeLeft"   Width="4"  HorizontalAlignment="Left"  Margin="0,30,0,4" Opacity="0" Cursor="SizeWE" IsHitTestVisible="{TemplateBinding Resizable}"/>
+                            <Thumb x:Name="ResizeTop"    Height="4" VerticalAlignment="Top"    Margin="4,0,4,0"  Opacity="0" Cursor="SizeNS" IsHitTestVisible="{TemplateBinding Resizable}"/>
+                            <Thumb x:Name="ResizeRight"  Width="4"  HorizontalAlignment="Right" Margin="0,30,0,4" Opacity="0" Cursor="SizeWE" IsHitTestVisible="{TemplateBinding Resizable}"/>
+                            <Thumb x:Name="ResizeBottom" Height="4" VerticalAlignment="Bottom" Margin="4,0,4,0"  Opacity="0" Cursor="SizeNS" IsHitTestVisible="{TemplateBinding Resizable}"/>
+                            <Thumb x:Name="ResizeTopLeft"     Width="6" Height="6" HorizontalAlignment="Left"  VerticalAlignment="Top"    Opacity="0" Cursor="SizeNWSE" IsHitTestVisible="{TemplateBinding Resizable}"/>
+                            <Thumb x:Name="ResizeTopRight"    Width="6" Height="6" HorizontalAlignment="Right" VerticalAlignment="Top"    Opacity="0" Cursor="SizeNESW" IsHitTestVisible="{TemplateBinding Resizable}"/>
+                            <Thumb x:Name="ResizeBottomRight" Width="6" Height="6" HorizontalAlignment="Right" VerticalAlignment="Bottom" Opacity="0" Cursor="SizeNWSE" IsHitTestVisible="{TemplateBinding Resizable}"/>
+                            <Thumb x:Name="ResizeBottomLeft"  Width="6" Height="6" HorizontalAlignment="Left"  VerticalAlignment="Bottom" Opacity="0" Cursor="SizeNESW" IsHitTestVisible="{TemplateBinding Resizable}"/>
+                        </Grid>
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <!-- Unfocused state -->
+                        <Trigger Property="Focused" Value="False">
+                            <Setter TargetName="OuterBorder"  Property="BorderBrush"  Value="{StaticResource Mdi.Border.Unfocused}"/>
+                            <Setter TargetName="OuterBorder"  Property="Background"   Value="{StaticResource Mdi.TitleBar.Unfocused}"/>
+                            <Setter TargetName="AccentStripe" Property="Opacity"      Value="0.3"/>
+                            <Setter TargetName="TitleText"    Property="Foreground"   Value="{StaticResource Mdi.Text.TitleUnfocused}"/>
+                            <Setter TargetName="MinimizeButton" Property="Tag"        Value="0"/>
+                            <Setter TargetName="MaximizeButton" Property="Tag"        Value="0"/>
+                            <Setter TargetName="CloseButton"    Property="Tag"        Value="0"/>
+                        </Trigger>
+
+                        <!-- No icon -->
+                        <Trigger SourceName="IconImage" Property="Source" Value="{x:Null}">
+                            <Setter TargetName="IconImage" Property="Width"  Value="0"/>
+                            <Setter TargetName="IconImage" Property="Margin" Value="0"/>
+                        </Trigger>
+
+                        <!-- Minimized -->
+                        <Trigger Property="WindowState" Value="Minimized">
+                            <Setter Property="MinWidth"   Value="160"/>
+                            <Setter Property="MinHeight"  Value="32"/>
+                            <Setter Property="Width"      Value="160"/>
+                            <Setter Property="Height"     Value="32"/>
+                            <Setter Property="Resizable"  Value="False"/>
+                            <Setter TargetName="ContentBorder" Property="Visibility" Value="Collapsed"/>
+                            <Setter TargetName="MinimizeButton" Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type Button}">
+                                        <Button Style="{StaticResource MdiWindowButtonStyle}">
+                                            <Path Fill="Transparent" StrokeThickness="1.5"
+                                                  Stroke="{StaticResource Mdi.Text.Title}"
+                                                  Width="10" Height="10"
+                                                  Data="M 0 0 L 10 0 L 10 10 L 0 10 Z"/>
+                                        </Button>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+
+                        <!-- Maximized -->
+                        <Trigger Property="WindowState" Value="Maximized">
+                            <Setter Property="Resizable" Value="False"/>
+                            <Setter TargetName="OuterBorder" Property="CornerRadius"    Value="0"/>
+                            <Setter TargetName="OuterBorder" Property="BorderThickness" Value="0,1,0,0"/>
+                            <Setter TargetName="AccentStripe" Property="Visibility"     Value="Collapsed"/>
+                            <Setter TargetName="ContentBorder" Property="Margin"        Value="0,30,0,0"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

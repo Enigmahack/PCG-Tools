@@ -17,7 +17,7 @@
                     <Label Content="{Binding Name, Source={StaticResource LocStrings}}" HorizontalAlignment="Left"
                        Margin="4"  VerticalAlignment="Top"/>
                        <TextBlock HorizontalAlignment="Left" Margin="4" Name="labelNameLength"  Text="X of Y characters" 
-                        VerticalAlignment="Top"  Background="{x:Static SystemColors.ControlLightBrush}"/>
+                        VerticalAlignment="Top"  Background="Transparent"/>
                 </StackPanel>
                 
                 <TextBox HorizontalAlignment="Left" IsReadOnly="False" Margin="4" Name="textBoxName" 
@@ -52,7 +52,7 @@
         </StackPanel>
 
         <StackPanel Orientation="Horizontal">
-            <Label Foreground="#FFD80000" HorizontalAlignment="Left" Margin="4"
+            <Label Foreground="{StaticResource Brush.TextError}" HorizontalAlignment="Left" Margin="4"
                Name="labelError" VerticalAlignment="Top">
                 <Label.Background>
                     <SolidColorBrush />

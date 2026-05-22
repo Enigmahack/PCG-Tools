@@ -40,8 +40,7 @@
     </Window.InputBindings>
 
     <DockPanel>
-        <Grid>
-            <Menu Height="23" HorizontalAlignment="Left" Name="menu1" VerticalAlignment="Top" Width="2000">
+            <Menu DockPanel.Dock="Top" Name="menu1">
                 <MenuItem Header="{Binding File, Source={StaticResource LocStrings}}" VerticalAlignment="Bottom">
                     <MenuItem Header="{Binding Open, Source={StaticResource LocStrings}}" 
                               ToolTip="{Binding OpenFileCommand_mainw_tt, Source={StaticResource LocStrings}}"
@@ -213,16 +212,19 @@
                 </MenuItem>
 
                 <MenuItem Header="{Binding Theme, Source={StaticResource LocStrings}}" VerticalAlignment="Center">
-                    <MenuItem Header="{Binding Generic, Source={StaticResource LocStrings}}"  
-                              ToolTip="{Binding Generic_mainw_tt, Source={StaticResource LocStrings}}"  IsCheckable="True" 
+                    <MenuItem Header="Dark" IsCheckable="True"
+                              IsChecked="{Binding Path=SelectedTheme, Converter={StaticResource EnumToBooleanConverter},
+                                    ConverterParameter=Dark}"/>
+                    <MenuItem Header="{Binding Generic, Source={StaticResource LocStrings}}"
+                              ToolTip="{Binding Generic_mainw_tt, Source={StaticResource LocStrings}}"  IsCheckable="True"
                               IsChecked="{Binding Path=SelectedTheme, Converter={StaticResource EnumToBooleanConverter},
                               ConverterParameter=Generic}"/>
-                    <MenuItem Header="{Binding Luna, Source={StaticResource LocStrings}}" 
-                              ToolTip="{Binding Luna_mainw_tt, Source={StaticResource LocStrings}}"  IsCheckable="True" 
+                    <MenuItem Header="{Binding Luna, Source={StaticResource LocStrings}}"
+                              ToolTip="{Binding Luna_mainw_tt, Source={StaticResource LocStrings}}"  IsCheckable="True"
                               IsChecked="{Binding Path=SelectedTheme, Converter={StaticResource EnumToBooleanConverter},
                                     ConverterParameter=Luna}"/>
-                    <MenuItem Header="{Binding Aero, Source={StaticResource LocStrings}}" 
-                              ToolTip="{Binding Aero_mainw_tt, Source={StaticResource LocStrings}}"  IsCheckable="True" 
+                    <MenuItem Header="{Binding Aero, Source={StaticResource LocStrings}}"
+                              ToolTip="{Binding Aero_mainw_tt, Source={StaticResource LocStrings}}"  IsCheckable="True"
                                 IsChecked="{Binding Path=SelectedTheme, Converter={StaticResource EnumToBooleanConverter},
                                     ConverterParameter=Aero}" />
                 </MenuItem>
@@ -296,8 +298,7 @@
                 </MenuItem>
             </Menu>
 
-            <ToolBar Height="36" HorizontalAlignment="Left" Margin="0,21,0,0" Name="toolBar" VerticalAlignment="Top" Width="2000" 
-                    HorizontalContentAlignment="Left">
+            <ToolBar DockPanel.Dock="Top" Height="36" Name="toolBar" HorizontalContentAlignment="Left">
                     
                 <Button Command="{Binding Path=OpenFileCommand}" 
                         ToolTip="{Binding OpenFileCommand_mainw_tt, Source={StaticResource LocStrings}}" >
@@ -355,7 +356,7 @@
                     <Image Source="Gui/Tool Bar Icons/copy.png"   Stretch="Fill" Style="{StaticResource toolbarImageStyle}"/>
                 </Button>
                 <Button Command="{Binding Path=CurrentChildViewModel.PasteCommand}"
-                        ToolTip="{Binding PasteCopiedPatches, Source={StaticResource LocStrings}}">
+                        ToolTip="{Binding PasteSelected, Source={StaticResource LocStrings}}">
                     <Image Source="Gui/Tool Bar Icons/paste.png"   Stretch="Fill" Style="{StaticResource toolbarImageStyle}"/>
                 </Button>
                 <Button Command="{Binding Path=ShowSettingsCommand}"
@@ -396,20 +397,9 @@
                 </Button> 
             </ToolBar>
                 
-            <Grid Margin="0,57,0,18">
-                <mdi:MdiContainer  Name="Container" Theme="Aero"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                    <mdi:MdiContainer.Background>
-                        <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
-                            <GradientStop Color="Black"/>
-                            <GradientStop Color="#E50050D2" Offset="1"/>
-                        </LinearGradientBrush>
-                    </mdi:MdiContainer.Background>
-                </mdi:MdiContainer>
-            </Grid>
-
-            <StatusBar Height="23" Name="statusBar1" HorizontalContentAlignment="Center"
-                       VerticalContentAlignment="Center" VerticalAlignment="Bottom">
-                <StatusBarItem Foreground="Blue">
+            <StatusBar DockPanel.Dock="Bottom" Height="23" Name="statusBar1" HorizontalContentAlignment="Center"
+                       VerticalContentAlignment="Center">
+                <StatusBarItem Foreground="{StaticResource Brush.Status.Accent}">
                     <TextBlock x:Name="StatusBarModel" Text="{Binding Path=StatusBarModel}" Margin="0,0,4,0" />
                 </StatusBarItem>
 
@@ -417,51 +407,51 @@
                     <TextBlock x:Name="StatusBarFileType" Text="{Binding Path=StatusBarFileType}" Margin="0,0,4,0" />
                 </StatusBarItem>
 
-                <StatusBarItem Foreground="DarkGreen">
+                <StatusBarItem Foreground="{StaticResource Brush.Status.Data}">
                     <TextBlock x:Name="StatusBarSongs" Text="{Binding Path=StatusBarSongs}" Margin="0,0,4,0" />
                 </StatusBarItem>
 
-                <StatusBarItem Foreground="DarkGreen">
+                <StatusBarItem Foreground="{StaticResource Brush.Status.Data}">
                     <TextBlock x:Name="StatusBarSamples" Text="{Binding Path=StatusBarSamples}" Margin="0,0,4,0" />
                 </StatusBarItem>
 
-                <StatusBarItem Foreground="DarkGreen">
+                <StatusBarItem Foreground="{StaticResource Brush.Status.Data}">
                     <TextBlock x:Name="StatusBarPrograms" Text="{Binding Path=StatusBarPrograms}" Margin="0,0,4,0" />
                 </StatusBarItem>
 
-                <StatusBarItem Foreground="DarkGreen">
+                <StatusBarItem Foreground="{StaticResource Brush.Status.Data}">
                     <TextBlock x:Name="StatusBarCombis" Text="{Binding Path=StatusBarCombis}" Margin="0,0,4,0" />
                 </StatusBarItem>
 
-                <StatusBarItem Foreground="DarkGreen">
+                <StatusBarItem Foreground="{StaticResource Brush.Status.Data}">
                     <TextBlock x:Name="StatusBarSetLists" Text="{Binding Path=StatusBarSetLists}" Margin="0,0,4,0" />
                 </StatusBarItem>
 
-                <StatusBarItem Foreground="DarkGreen">
+                <StatusBarItem Foreground="{StaticResource Brush.Status.Data}">
                     <TextBlock x:Name="StatusBarDrumKits" Text="{Binding Path=StatusBarDrumKits}" Margin="0,0,4,0"/>
                 </StatusBarItem>
 
-                <StatusBarItem Foreground="DarkGreen">
+                <StatusBarItem Foreground="{StaticResource Brush.Status.Data}">
                     <TextBlock x:Name="StatusBarDrumPatterns" Text="{Binding Path=StatusBarDrumPatterns}" Margin="0,0,4,0"/>
                 </StatusBarItem>
 
-                <StatusBarItem Foreground="DarkGreen">
+                <StatusBarItem Foreground="{StaticResource Brush.Status.Data}">
                     <TextBlock x:Name="StatusBarWaveSequences" Text="{Binding Path=StatusBarWaveSequences}" Margin="0,0,4,0"/>
                 </StatusBarItem>
-                
-                <StatusBarItem >
-                    <Separator></Separator>
+
+                <StatusBarItem>
+                    <Separator/>
                 </StatusBarItem>
 
-                <StatusBarItem >
-                    <Separator></Separator>
-                </StatusBarItem>
-
-                <StatusBarItem Foreground="DarkRed">
+                <StatusBarItem Foreground="{StaticResource Brush.Status.Clipboard}">
                     <TextBlock x:Name="StatusBarClipBoard" Text="{Binding Path=StatusBarClipBoard}" Margin="0,0,4,0" />
                 </StatusBarItem>
             </StatusBar>
-        </Grid>
+
+            <Grid>
+                <mdi:MdiContainer Name="Container" Theme="Dark" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                                  Background="#FF141414"/>
+            </Grid>
     </DockPanel>
 
 </Window>

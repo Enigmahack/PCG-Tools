@@ -10,7 +10,7 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Paper;component/PaperBlue.xaml" />
+                <ResourceDictionary Source="/PcgTools;component/Themes/DarkTheme.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <converters:EnumToBooleanConverter x:Key="EnumToBooleanConverter"/>
             <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>

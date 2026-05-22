@@ -182,9 +182,11 @@ namespace PcgTools.Model.KronosSpecific.Synth
                     return;
                 }
 
+                InvalidateUsedProgramCache();
+
                 // Set in CMB1, if a new bank is used, set index to 127.
-                Combi.PcgRoot.Content[TimbresOffset] = ((PcgRoot.Model.OsVersion == Models.EOsVersion.EOsVersionKronos15_16) && 
-                    (((IProgramBank)(value.Parent)).Type == BankType.EType.UserExtended)) ? 
+                Combi.PcgRoot.Content[TimbresOffset] = ((PcgRoot.Model.OsVersion == Models.EOsVersion.EOsVersionKronos15_16) &&
+                    (((IProgramBank)(value.Parent)).Type == BankType.EType.UserExtended)) ?
                     (byte) 127 : (byte) value.Index;
 
                 // Set in CMB2.

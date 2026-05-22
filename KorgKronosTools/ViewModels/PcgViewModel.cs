@@ -235,7 +235,9 @@ namespace PcgTools.ViewModels
         /// </summary>
         SelectedBanksType _selectedBanksType = SelectedBanksType.None;
 
-        
+        private bool _suppressBanksChanged;
+
+
         /// <summary>
         /// FUTURE: Identical to CombiBanksSelected and SetListsSelected.
         /// </summary>
@@ -253,14 +255,14 @@ namespace PcgTools.ViewModels
                 {
                     _selectedBanksType = SelectedBanksType.ProgramBanks;
 
-                    Banks.Clear(); // = new ObservableCollectionEx<IBank>();
+                    _suppressBanksChanged = true;
+                    Banks.Clear();
                     foreach (var bank in SelectedPcgMemory.ProgramBanks.BankCollection)
                     {
                         Banks.Add(bank);
                     }
+                    _suppressBanksChanged = false;
 
-                    //BanksChanged();
-                    
                     OnPropertyChanged("ProgramBanksSelected");
                 }
             }
@@ -284,13 +286,13 @@ namespace PcgTools.ViewModels
                 {
                     _selectedBanksType = SelectedBanksType.CombiBanks;
 
-                    Banks.Clear(); // new ObservableCollectionEx<IBank>();
+                    _suppressBanksChanged = true;
+                    Banks.Clear();
                     foreach (var bank in SelectedPcgMemory.CombiBanks.BankCollection)
                     {
                         Banks.Add(bank);
                     }
-
-                   // BanksChanged();
+                    _suppressBanksChanged = false;
 
                     OnPropertyChanged("CombiBanksSelected");
                 }
@@ -311,13 +313,13 @@ namespace PcgTools.ViewModels
                 {
                     _selectedBanksType = SelectedBanksType.SetLists;
 
-                    Banks.Clear(); // // new ObservableCollectionEx<IBank>();
+                    _suppressBanksChanged = true;
+                    Banks.Clear();
                     foreach (var bank in SelectedPcgMemory.SetLists.BankCollection)
                     {
                         Banks.Add(bank);
                     }
-
-                    //BanksChanged();
+                    _suppressBanksChanged = false;
 
                     OnPropertyChanged("SetListsSelected");
                 }
@@ -339,13 +341,13 @@ namespace PcgTools.ViewModels
                 {
                     _selectedBanksType = SelectedBanksType.DrumKitBanks;
 
-                    Banks.Clear(); // new ObservableCollectionEx<IBank>();
+                    _suppressBanksChanged = true;
+                    Banks.Clear();
                     foreach (var bank in SelectedPcgMemory.DrumKitBanks.BankCollection)
                     {
                         Banks.Add(bank);
                     }
-
-                    //BanksChanged();
+                    _suppressBanksChanged = false;
 
                     OnPropertyChanged("DrumKitBanksSelected");
                 }
@@ -367,13 +369,13 @@ namespace PcgTools.ViewModels
                 {
                     _selectedBanksType = SelectedBanksType.DrumPatternBanks;
 
-                    Banks.Clear(); // new ObservableCollectionEx<IBank>();
+                    _suppressBanksChanged = true;
+                    Banks.Clear();
                     foreach (var bank in SelectedPcgMemory.DrumPatternBanks.BankCollection)
                     {
                         Banks.Add(bank);
                     }
-
-                    //BanksChanged();
+                    _suppressBanksChanged = false;
 
                     OnPropertyChanged("DrumPatternBanksSelected");
                 }
@@ -395,13 +397,13 @@ namespace PcgTools.ViewModels
                 {
                     _selectedBanksType = SelectedBanksType.WaveSequenceBanks;
 
-                    Banks.Clear(); // new ObservableCollectionEx<IBank>();
+                    _suppressBanksChanged = true;
+                    Banks.Clear();
                     foreach (var bank in SelectedPcgMemory.WaveSequenceBanks.BankCollection)
                     {
                         Banks.Add(bank);
                     }
-
-                    //BanksChanged();
+                    _suppressBanksChanged = false;
 
                     OnPropertyChanged("WaveSequenceBanksSelected");
                 }
@@ -424,14 +426,15 @@ namespace PcgTools.ViewModels
                 {
                     _selectedBanksType = SelectedBanksType.AllPatches;
 
-                    // Add all banks.
-                    Banks.Clear(); // new ObservableCollectionEx<IBank>();
+                    _suppressBanksChanged = true;
+                    Banks.Clear();
                     AddBanks(SelectedPcgMemory.ProgramBanks);
                     AddBanks(SelectedPcgMemory.CombiBanks);
                     AddBanks(SelectedPcgMemory.SetLists);
                     AddBanks(SelectedPcgMemory.DrumKitBanks);
                     AddBanks(SelectedPcgMemory.DrumPatternBanks);
                     AddBanks(SelectedPcgMemory.WaveSequenceBanks);
+                    _suppressBanksChanged = false;
 
                     OnPropertyChanged("AllPatchesSelected");
                 }
@@ -2626,24 +2629,20 @@ namespace PcgTools.ViewModels
         {
             get
             {
-                // Memory selected
-                return (SelectedPcgMemory != null) &&
-                       // Patches set
-                       (Patches != null) &&
-                       // Combi banks or set list slots selected
-                       (CombiBanksSelected || (SetListsSelected) &&
-                       // Banks selected and at least one nonempty combi 
-                       (((SelectedScopeSet == ScopeSet.Banks) &&
-                         (Banks.Count(item => item.IsSelected) > 0) &&
-                         (Banks.Sum(item => item.CountFilledAndNonEmptyPatches)) > 0)
-                        ||
-                        // Patches selected and at least one nonempty combi or set list slot
-                        ((SelectedScopeSet == ScopeSet.Patches) &&
-                         (Patches.Count(item => item.IsSelected && !item.IsEmptyOrInit) > 0))) &&
-                       // Not busy with paste action
-                       (!PcgClipBoard.PasteDuplicatesExecuted || PcgClipBoard.IsEmpty) &&
-                       // Only combis selected
-                       Patches.All(item => !item.IsSelected || (item is ICombi) || (item is ISetListSlot)));
+                if (SelectedPcgMemory == null || Patches == null)
+                    return false;
+                if (!CombiBanksSelected && !SetListsSelected)
+                    return false;
+                if (PcgClipBoard.PasteDuplicatesExecuted && !PcgClipBoard.IsEmpty)
+                    return false;
+                if (SelectedScopeSet == ScopeSet.Banks)
+                {
+                    return Banks.Count(item => item.IsSelected) > 0 &&
+                           Banks.Sum(item => item.CountFilledAndNonEmptyPatches) > 0 &&
+                           Patches.All(item => !item.IsSelected || item is ICombi || item is ISetListSlot);
+                }
+                return Patches.Count(item => item.IsSelected && !item.IsEmptyOrInit) > 0 &&
+                       Patches.All(item => !item.IsSelected || item is ICombi || item is ISetListSlot);
             }
         }
 
@@ -3913,39 +3912,25 @@ namespace PcgTools.ViewModels
         /// </summary>
         public void BanksChanged()
         {
-            if (Banks != null)
+            if (Banks == null || _suppressBanksChanged) return;
+
+            IEnumerable<IPatch> newPatches;
+            if (_selectedBanksType == SelectedBanksType.AllPatches)
             {
-                Patches.Clear(); //> new ObservableCollectionEx<IPatch>();
-
-                if (_selectedBanksType == SelectedBanksType.AllPatches)
-                {
-                    // Add all non empty patches.
-                    foreach (var patch in from bank in Banks from patch in bank.Patches
-                                          where patch.IsLoaded && !patch.IsEmptyOrInit  // Virtual patches have noninit name
-                                          select patch)
-                    {
-                        Patches.Add(patch);
-                    }
-                }
-                else
-                {
-                    // If no bank selected, select first.
-                    /* var firstSelectedBank = Banks.FirstOrDefault(bank => bank.IsSelected);
-                    if ((firstSelectedBank == null) && (Banks.Count > 0))
-                    {
-                        Banks[0].IsSelected = true;
-                    }
-                    */
-                    // Add selected banks.
-                    foreach (var patch in Banks.Where(bank => bank.IsSelected).SelectMany(bank => bank.Patches))
-                    {
-                        Patches.Add(patch);
-                    }
-                }
-
-                NumberOfPatches = Patches.Count;
-                NumberOfSelectedPatches = Patches.Count(item => item.IsSelected);
+                newPatches = Banks.SelectMany(bank => bank.Patches)
+                                  .Where(patch => patch.IsLoaded && !patch.IsEmptyOrInit)
+                                  .ToList();
             }
+            else
+            {
+                newPatches = Banks.Where(bank => bank.IsSelected)
+                                  .SelectMany(bank => bank.Patches)
+                                  .ToList();
+            }
+
+            Patches.ReplaceAll(newPatches);
+            NumberOfPatches = Patches.Count;
+            NumberOfSelectedPatches = Patches.Count(item => item.IsSelected);
         }
 
 

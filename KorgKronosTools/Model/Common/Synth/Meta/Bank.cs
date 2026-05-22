@@ -53,6 +53,7 @@ namespace PcgTools.Model.Common.Synth.Meta
             Id = id;
             PcgId = pcgId;
             Patches = new ObservablePatchCollection();
+            Patches.CollectionChanged += (s, e) => _countFilledAndNonEmptyPatchesCache = null;
         }
 
 
@@ -132,9 +133,14 @@ namespace PcgTools.Model.Common.Synth.Meta
 
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
-        public bool IsLoaded { get; set; }
+        private bool _isLoaded;
+        public bool IsLoaded
+        {
+            get => _isLoaded;
+            set { _isLoaded = value; _countFilledAndNonEmptyPatchesCache = null; }
+        }
         
 
         /// <summary>
@@ -272,15 +278,18 @@ namespace PcgTools.Model.Common.Synth.Meta
         public abstract void CreatePatch(int index);
 
 
-        /// <summary>
-        /// 
-        /// </summary>
+        private int? _countFilledAndNonEmptyPatchesCache;
+
         public int CountFilledAndNonEmptyPatches
         {
             get
             {
-                return Patches.Count(patch =>
-                    ((IBank) (patch.Parent)).IsLoaded && !patch.IsEmptyOrInit && (Type != BankType.EType.Gm));
+                if (_countFilledAndNonEmptyPatchesCache == null)
+                {
+                    _countFilledAndNonEmptyPatchesCache = Patches.Count(patch =>
+                        ((IBank)(patch.Parent)).IsLoaded && !patch.IsEmptyOrInit && (Type != BankType.EType.Gm));
+                }
+                return _countFilledAndNonEmptyPatchesCache.Value;
             }
         }
 
@@ -298,11 +307,14 @@ namespace PcgTools.Model.Common.Synth.Meta
 
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public virtual void Clear()
         {
             // Nothing to do. Banks do not have any information handled by PCG Tools.
         }
+
+        // XAML display column; bank types that don't override this show an empty cell.
+        public virtual string Column2 => null;
     }
 }

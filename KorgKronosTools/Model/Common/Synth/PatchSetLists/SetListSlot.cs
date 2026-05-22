@@ -163,14 +163,14 @@ namespace PcgTools.Model.Common.Synth.PatchSetLists
         /// </summary>
         // ReSharper disable once UnusedMember.Global
         [UsedImplicitly]
-        public string Reference => FullPatchId;
+        public override string Reference => FullPatchId;
 
 
         /// <summary>
         /// 
         /// </summary>
         // ReSharper disable once UnusedMember.Global
-        [UsedImplicitly] public string ProgramCombiName => ((SelectedPatchType == PatchType.Song) || (PcgRoot.Content == null) || (UsedPatch == null))
+        [UsedImplicitly] public override string ProgramCombiName => ((SelectedPatchType == PatchType.Song) || (PcgRoot.Content == null) || (UsedPatch == null))
             ? "(Unknown)"
             : (((IBank)(UsedPatch.Parent)).IsLoaded ? UsedPatch.Name : "(Unknown)");
 
@@ -179,7 +179,7 @@ namespace PcgTools.Model.Common.Synth.PatchSetLists
         /// 
         /// </summary>
         // ReSharper disable once UnusedMember.Global
-        [UsedImplicitly] public string VolumeAsString
+        [UsedImplicitly] public override string VolumeAsString
         // ReSharper restore UnusedMember.Global
             => Volume.ToString(CultureInfo.InvariantCulture);
 
@@ -194,7 +194,7 @@ namespace PcgTools.Model.Common.Synth.PatchSetLists
         /// 
         /// </summary>
         [UsedImplicitly]
-        public string DescriptionInList => Settings.Default.SingleLinedSetListSlotDescriptions ? Description.Replace("\r\n", " / ") : Description;
+        public override string DescriptionInList => Settings.Default.SingleLinedSetListSlotDescriptions ? Description.Replace("\r\n", " / ") : Description;
 
 
         /// <summary>

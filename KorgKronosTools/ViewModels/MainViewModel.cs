@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Common.Mvvm;
 using Common.Utils;
@@ -102,7 +103,7 @@ namespace PcgTools.ViewModels
         {
             PcgClipBoard = new PcgClipBoard();
             ChildWindows = new ObservableCollection<IChildWindow>();
-            SelectedTheme = Theme.Aero;
+            SelectedTheme = Theme.Dark;
             MasterFiles.MasterFiles.Instances.Set(this);
             OpenedPcgWindows = new OpenedPcgWindows();
 
@@ -539,9 +540,12 @@ namespace PcgTools.ViewModels
 
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         ICommand _openFileCommand;
+
+
+        bool _isLoadingFile;
 
 
         /// <summary>
@@ -553,7 +557,7 @@ namespace PcgTools.ViewModels
         {
             get
             {
-                return _openFileCommand ?? (_openFileCommand = new RelayCommand(param => OpenFile(), param => true));
+                return _openFileCommand ?? (_openFileCommand = new RelayCommand(param => OpenFile(), param => !_isLoadingFile));
             }
         }
 
@@ -680,7 +684,7 @@ namespace PcgTools.ViewModels
         /// <summary>
         /// 
         /// </summary>
-        void OpenFile()
+        async void OpenFile()
         {
             var result = OpenFileDialog(Strings.SelectFileToRead, _fileFormats, _lastUsedFilterType, true);
 
@@ -691,27 +695,10 @@ namespace PcgTools.ViewModels
 
             _lastUsedFilterType = result.FilterIndex;
 
-            try
+            foreach (var fileNameToOpen in result.Files)
             {
-                SetCursor(WindowUtils.ECursor.Wait);
-
-                foreach (var fileNameToOpen in result.Files)
-                {
-                    CheckAndOpenFile(fileNameToOpen);
-                }
+                await ReadAndShowFileTask(fileNameToOpen, true);
             }
-            catch (NotSupportedException exc)
-            {
-                ShowMessageBox(
-                    string.Format(Strings.FileOpenException,
-                        exc.Message + "\n\n" + exc.InnerException, exc.StackTrace), Strings.PcgTools, WindowUtils.EMessageBoxButton.Ok,
-                        WindowUtils.EMessageBoxImage.Error, WindowUtils.EMessageBoxResult.Ok);
-            }
-            finally
-            {
-                SetCursor(WindowUtils.ECursor.Arrow);
-            }
-
         }
 
 
@@ -748,32 +735,58 @@ namespace PcgTools.ViewModels
 
 
         /// <summary>
-        /// Reads and shows the requested file.
+        /// Reads and shows the requested file (fire-and-forget entry point for non-awaiting callers).
         /// </summary>
         /// <param name="fileName"></param>
         /// <param name="checkAutoLoadMasterFileSetting">True for checking settings for autoloading the master file</param>
-        void ReadAndShowFile(string fileName, bool checkAutoLoadMasterFileSetting)
+        async void ReadAndShowFile(string fileName, bool checkAutoLoadMasterFileSetting)
         {
-#if !DEBUG
-            try
-#endif
+            await ReadAndShowFileTask(fileName, checkAutoLoadMasterFileSetting);
+        }
+
+
+        async Task ReadAndShowFileTask(string fileName, bool checkAutoLoadMasterFileSetting)
+        {
+            if (_isLoadingFile)
             {
-                PcgFileCommands.LoadFileAndMasterFile(this, fileName, checkAutoLoadMasterFileSetting);
+                return;
+            }
+
+            _isLoadingFile = true;
+            CommandManager.InvalidateRequerySuggested();
+            SetCursor(WindowUtils.ECursor.Wait);
+            try
+            {
+                await PcgFileCommands.LoadFileAndMasterFileAsync(this, fileName, checkAutoLoadMasterFileSetting);
             }
 #if !DEBUG
             catch (IOException exception)
             {
                 ShowMessageBox(String.Format(Strings.FileOpenException, fileName, exception.Message, exception.StackTrace),
-                                Strings.PcgTools, WindowUtils.EMessageBoxButton.Ok, WindowUtils.EMessageBoxImage.Error, 
-                                WindowUtils.EMessageBoxResult.Ok);
+                    Strings.PcgTools, WindowUtils.EMessageBoxButton.Ok, WindowUtils.EMessageBoxImage.Error,
+                    WindowUtils.EMessageBoxResult.Ok);
             }
             catch (ApplicationException exception)
             {
                 ShowMessageBox(String.Format(Strings.FileOpenException, fileName, exception.Message, exception.StackTrace),
-                                Strings.PcgTools, WindowUtils.EMessageBoxButton.Ok, WindowUtils.EMessageBoxImage.Error,
-                                WindowUtils.EMessageBoxResult.Ok);
+                    Strings.PcgTools, WindowUtils.EMessageBoxButton.Ok, WindowUtils.EMessageBoxImage.Error,
+                    WindowUtils.EMessageBoxResult.Ok);
             }
 #endif
+            catch (NotSupportedException exception)
+            {
+                ShowMessageBox(
+                    string.Format(Strings.FileOpenException,
+                        exception.Message + "\n\n" + exception.InnerException, exception.StackTrace),
+                    Strings.PcgTools, WindowUtils.EMessageBoxButton.Ok,
+                    WindowUtils.EMessageBoxImage.Error, WindowUtils.EMessageBoxResult.Ok);
+            }
+            finally
+            {
+                _isLoadingFile = false;
+                CommandManager.InvalidateRequerySuggested();
+                SetCursor(WindowUtils.ECursor.Arrow);
+            }
         }
 
         
@@ -2013,7 +2026,8 @@ namespace PcgTools.ViewModels
         {
             Generic,
             Luna,
-            Aero
+            Aero,
+            Dark
         }
 
 

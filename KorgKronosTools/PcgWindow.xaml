@@ -46,15 +46,6 @@
                          IsChecked="{Binding Path=AllPatchesSelected}" 
                          Margin="4"/>
 
-            <StackPanel Margin="4">
-                <StackPanel.Background>
-                    <LinearGradientBrush EndPoint="1,0.5" StartPoint="0,0.5">
-                        <GradientStop Color="#FFFF6464" Offset="0" />
-                        <GradientStop Color="#FF960000" Offset="1" />
-                        <GradientStop Color="Red" Offset="0" />
-                    </LinearGradientBrush>
-                </StackPanel.Background>
-            </StackPanel>
             <Label  Content="{Binding NumberOfPatches, Source={StaticResource LocStrings}}" VerticalAlignment="Center"/>
             <Label  Content="{Binding NumberOfPatches}" VerticalAlignment="Center" Margin="4, 0, 16, 0"/>
 
@@ -62,50 +53,58 @@
             <Label  Content="{Binding NumberOfSelectedPatches}" VerticalAlignment="Center" Margin="4, 0, 0, 0"/>
         </StackPanel>
 
-        <WrapPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
-            <GroupBox Header="{Binding CutCopyPasteMode, Source={StaticResource LocStrings}}" Margin="4">
-                <WrapPanel>
-                    <Button Content="{Binding Cut, Source={StaticResource LocStrings}}" Margin="4" 
-                            Command="{Binding Path=CutCommand}" Width="80"  />
-                    <Button Content="{Binding Copy, Source={StaticResource LocStrings}}" Margin="4" 
-                            Command="{Binding Path=CopyCommand}" Width="80" />
-                    <Button Content="{Binding Paste, Source={StaticResource LocStrings}}" Margin="4" 
-                            Command="{Binding Path=PasteCommand}" Width="80"/>
-                    <Button Content="{Binding Exit, Source={StaticResource LocStrings}}" Margin="4" 
-                            Command="{Binding Path=ExitCopyPasteModeCommand}" Width="80"/>
-                    <Button Content="{Binding Recall, Source={StaticResource LocStrings}}" Margin="4" 
-                            Command="{Binding Path=RecallCommand}" Width="80"/>
-                </WrapPanel>
-            </GroupBox>
-
-            <Button DockPanel.Dock="Bottom" Content="{Binding GenerateList, Source={StaticResource LocStrings}}" Margin="4" 
-                    Command="{Binding Path=RunListGeneratorCommand}" Width="128"/>
-        </WrapPanel>
-
-        <WrapPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
-            <Button Content="{Binding Edit, Source={StaticResource LocStrings}}" Width="80" Margin="4"
-             Command="{Binding Path=EditSelectedItemCommand}"/>
-            <Button Content="{Binding Up, Source={StaticResource LocStrings}}" Width="80" Margin="4"
-             Command="{Binding Path=MoveUpCommand}"/>
-            <Button Content="{Binding Down, Source={StaticResource LocStrings}}" Width="80" Margin="4"
-             Command="{Binding Path=MoveDownCommand}"/>
-
-            <Button Content="{Binding Clear, Source={StaticResource LocStrings}}" Margin="4"
-             Width="80" Command="{Binding Path=ClearCommand}"/>
-            <Button Content="{Binding Compact, Source={StaticResource LocStrings}}" Margin="4"    
-             Width="80" Command="{Binding Path=CompactCommand}"/>
-            <Button Content="{Binding Sort_menu, Source={StaticResource LocStrings}}" Margin="4"    
-             Width="80" Command="{Binding Path=SortCommand}"/>
-            <Button x:Name="ButtonTimbres" Content="{Binding Timbres, Source={StaticResource LocStrings}}" Margin="4" 
-             Width="80" Command="{Binding Path=ShowTimbresCommand}"/>
-            <Button x:Name="ButtonAssign" Content="{Binding Assign, Source={StaticResource LocStrings}}" Margin="4" 
-                            Command="{Binding Path=AssignCommand}" Width="80">
-                <Button.ToolTip>
-                    <Label Content="{Binding AssignToolTipText}"/>
-                </Button.ToolTip>
-            </Button>
-
-        </WrapPanel>
+        <!-- Action bar -->
+        <Border DockPanel.Dock="Bottom"
+                Background="{StaticResource Brush.Surface2}"
+                BorderBrush="{StaticResource Brush.Border}"
+                BorderThickness="0,1,0,0"
+                Padding="4,4">
+            <StackPanel>
+                <!-- Row 1: patch operations -->
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,3">
+                    <Button Content="{Binding Edit, Source={StaticResource LocStrings}}"    Width="70" Margin="2,1"
+                            Command="{Binding Path=EditSelectedItemCommand}"/>
+                    <Button Content="{Binding Up, Source={StaticResource LocStrings}}"     Width="52" Margin="2,1"
+                            Command="{Binding Path=MoveUpCommand}"/>
+                    <Button Content="{Binding Down, Source={StaticResource LocStrings}}"   Width="52" Margin="2,1"
+                            Command="{Binding Path=MoveDownCommand}"/>
+                    <Rectangle Width="1" Margin="6,2" Fill="{StaticResource Brush.Border}"/>
+                    <Button Content="{Binding Clear, Source={StaticResource LocStrings}}"   Width="60" Margin="2,1"
+                            Command="{Binding Path=ClearCommand}"/>
+                    <Button Content="{Binding Compact, Source={StaticResource LocStrings}}" Width="70" Margin="2,1"
+                            Command="{Binding Path=CompactCommand}"/>
+                    <Button Content="{Binding Sort_menu, Source={StaticResource LocStrings}}" Width="52" Margin="2,1"
+                            Command="{Binding Path=SortCommand}"/>
+                    <Button x:Name="ButtonTimbres" Content="{Binding Timbres, Source={StaticResource LocStrings}}" Width="70" Margin="2,1"
+                            Command="{Binding Path=ShowTimbresCommand}"/>
+                    <Button x:Name="ButtonAssign" Content="{Binding Assign, Source={StaticResource LocStrings}}" Width="70" Margin="2,1"
+                            Command="{Binding Path=AssignCommand}">
+                        <Button.ToolTip>
+                            <Label Content="{Binding AssignToolTipText}"/>
+                        </Button.ToolTip>
+                    </Button>
+                </StackPanel>
+                <!-- Row 2: clipboard + list generator -->
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding CutCopyPasteMode, Source={StaticResource LocStrings}}"
+                               Foreground="{StaticResource Brush.TextSecondary}"
+                               FontSize="11" VerticalAlignment="Center" Margin="2,0,8,0"/>
+                    <Button Content="{Binding Cut, Source={StaticResource LocStrings}}"    Width="52" Margin="2,1"
+                            Command="{Binding Path=CutCommand}"/>
+                    <Button Content="{Binding Copy, Source={StaticResource LocStrings}}"   Width="52" Margin="2,1"
+                            Command="{Binding Path=CopyCommand}"/>
+                    <Button Content="{Binding Paste, Source={StaticResource LocStrings}}"  Width="52" Margin="2,1"
+                            Command="{Binding Path=PasteCommand}"/>
+                    <Button Content="{Binding Exit, Source={StaticResource LocStrings}}"   Width="52" Margin="2,1"
+                            Command="{Binding Path=ExitCopyPasteModeCommand}"/>
+                    <Button Content="{Binding Recall, Source={StaticResource LocStrings}}" Width="62" Margin="2,1"
+                            Command="{Binding Path=RecallCommand}"/>
+                    <Rectangle Width="1" Margin="6,2" Fill="{StaticResource Brush.Border}"/>
+                    <Button Content="{Binding GenerateList, Source={StaticResource LocStrings}}" Width="110" Margin="2,1"
+                            Command="{Binding Path=RunListGeneratorCommand}"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
 
 
 
@@ -117,11 +116,10 @@
                       MouseDoubleClick="OnBanksDoubleClick">
 
                 <ListView.ItemContainerStyle>
-                    <Style TargetType="ListViewItem">
+                    <Style TargetType="ListViewItem" BasedOn="{StaticResource {x:Type ListViewItem}}">
                         <Setter Property="IsSelected" Value="{Binding Path=IsSelected, Mode=TwoWay}"/>
-                        <Setter Property="BorderBrush" Value="LightGray" />
+                        <Setter Property="BorderBrush" Value="{StaticResource Brush.Border}" />
                         <Setter Property="BorderThickness" Value="0,0,0,1" />
-
                     </Style>
                 </ListView.ItemContainerStyle>
                 <ListView.View>
@@ -136,11 +134,13 @@
         </Grid>
 
         <Grid>
-            <ListView HorizontalAlignment="Stretch" Margin="3,7,5,1" Name="listViewPatches" 
-                      VerticalAlignment="Stretch" SelectionMode="Extended" 
-                      AlternationCount="1" GotFocus="ListViewPatchGotFocus" 
+            <ListView HorizontalAlignment="Stretch" Margin="3,7,5,1" Name="listViewPatches"
+                      VerticalAlignment="Stretch" SelectionMode="Extended"
+                      VirtualizingPanel.IsVirtualizing="True"
+                      VirtualizingPanel.VirtualizationMode="Recycling"
+                      GotFocus="ListViewPatchGotFocus"
                       MouseDoubleClick="OnPatchesMouseDoubleClick" SelectionChanged="ListViewPatchesSelectionChanged"
-                      Width="Auto" 
+                      Width="Auto"
                       VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
                 <ListView.View>
                     <GridView AllowsColumnReorder="False">
@@ -170,10 +170,10 @@
                 </ListView.View>
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
-                        <Setter Property="IsSelected" Value="{Binding Path=IsSelected, Mode=TwoWay}"/>
-                        <Setter Property="BorderBrush" Value="LightGray" />
-                        <Setter Property="BorderThickness" Value="0,0,0,1" />
-                        <Setter Property="ToolTip" Value="{Binding Path=ToolTip}"/>
+                            <Setter Property="IsSelected" Value="{Binding Path=IsSelected, Mode=TwoWay}"/>
+                            <Setter Property="BorderBrush" Value="{StaticResource Brush.Border}" />
+                            <Setter Property="BorderThickness" Value="0,0,0,1" />
+                            <Setter Property="ToolTip" Value="{Binding Path=ToolTip}"/>
                         </Style>
                     </ListView.ItemContainerStyle>
                     <Validation.ErrorTemplate>

@@ -194,8 +194,8 @@ namespace Common.Utils
                     break;
 
                 case ECursor.Arrow:
-                    cursor = Cursors.Arrow;
-                    break;
+                    Mouse.OverrideCursor = null;
+                    return;
 
                 default:
                     throw new ApplicationException("Illegal cursor");

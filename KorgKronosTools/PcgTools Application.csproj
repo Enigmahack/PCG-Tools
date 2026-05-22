@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PcgTools</RootNamespace>
     <AssemblyName>PcgTools</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -982,6 +982,9 @@
     <Compile Include="ViewModels\ViewModel.cs" />
     <Compile Include="Windows\IWindow.cs" />
     <Compile Include="Windows\IPcgWindow.cs" />
+    <Resource Include="Themes\DarkTheme.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Resource>
     <Page Include="Edit\WindowEditMultipleCombiBanks.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -1102,6 +1105,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DarkModeHelper.cs" />
     <Compile Include="Model\Common\File\KorgFileReader.cs" />
     <Compile Include="Model\Common\Synth\MemoryAndFactory\Client.cs" />
     <Compile Include="Model\Common\Synth\PatchCombis\CombiBanks.cs" />
@@ -1477,20 +1481,7 @@
     <Resource Include="Gui\Tool Bar Icons\copy - recall.png" />
     <Resource Include="Gui\Tool Bar Icons\document_plain.png" />
   </ItemGroup>
-  <ItemGroup>
-    <FileAssociation Include=".PCG">
-      <Visible>False</Visible>
-      <Description>Korg PCG File</Description>
-      <Progid>PCG_File</Progid>
-      <DefaultIcon>Gui\pcgtools.ico</DefaultIcon>
-    </FileAssociation>
-    <FileAssociation Include=".SNG">
-      <Visible>False</Visible>
-      <Description>Korg SNG File</Description>
-      <Progid>SNG_File</Progid>
-      <DefaultIcon>Gui\pcgtools.ico</DefaultIcon>
-    </FileAssociation>
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <PublishFile Include="Paper.dll">
       <Visible>False</Visible>

@@ -13,6 +13,7 @@ using System.Threading;
 #endif
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Interop;
 using Common.Utils;
 using Microsoft.Win32;
 using PcgTools.Help;
@@ -49,6 +50,7 @@ namespace PcgTools
             Normal,
             Maximized
         };
+
 
 
         /// <summary>
@@ -330,6 +332,8 @@ namespace PcgTools
         /// <param name="e"></param>
         private void MainWindowLoaded(object sender, RoutedEventArgs e)
         {
+            DarkModeHelper.ApplyDarkTitleBar(this);
+
 #if !DEBUG
             try
             {
@@ -670,7 +674,8 @@ namespace PcgTools
                 {
                     {MainViewModel.Theme.Generic, MdiContainer.ThemeType.Generic},
                     {MainViewModel.Theme.Luna, MdiContainer.ThemeType.Luna},
-                    {MainViewModel.Theme.Aero, MdiContainer.ThemeType.Aero}
+                    {MainViewModel.Theme.Aero, MdiContainer.ThemeType.Aero},
+                    {MainViewModel.Theme.Dark, MdiContainer.ThemeType.Dark}
                 };
                 Container.Theme = enumConverter[ViewModel.SelectedTheme];
                 break;

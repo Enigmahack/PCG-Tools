@@ -27,7 +27,11 @@ namespace WPF.MDI
             /// <summary>
             /// Windows Vista and 7 theme.
             /// </summary>
-            Aero
+            Aero,
+            /// <summary>
+            /// Modern dark theme.
+            /// </summary>
+            Dark
         }
 
         #region Static Members
@@ -306,6 +310,12 @@ namespace WPF.MDI
                 // ReSharper disable PossibleNullReferenceException
                 Application.Current.Resources.MergedDictionaries.Add(_currentResourceDictionary = (ResourceDictionary) XamlReader.Load(
                     Application.GetResourceStream(new Uri(@"WPF.MDI;component/Themes/Aero.xaml", UriKind.Relative)).Stream));
+                // ReSharper restore PossibleNullReferenceException
+                break;
+            case ThemeType.Dark:
+                // ReSharper disable PossibleNullReferenceException
+                Application.Current.Resources.MergedDictionaries.Add(_currentResourceDictionary = (ResourceDictionary) XamlReader.Load(
+                    Application.GetResourceStream(new Uri(@"WPF.MDI;component/Themes/Dark.xaml", UriKind.Relative)).Stream));
                 // ReSharper restore PossibleNullReferenceException
                 break;
             }

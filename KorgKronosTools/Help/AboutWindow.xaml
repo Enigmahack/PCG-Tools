@@ -4,7 +4,7 @@
         Title="{Binding About, Source={StaticResource LocStrings}}" Name="windowAbout" 
          WindowStartupLocation="CenterOwner" ResizeMode="NoResize" ShowInTaskbar="True" 
         Icon="/PcgTools;component/Gui/pcgtools.ico" Opacity="1" Topmost="True" SizeToContent="WidthAndHeight">
-    <StackPanel Background="#FFDCDCEB" >
+    <StackPanel>
         <StackPanel Orientation="Horizontal">
             <Image HorizontalAlignment="Left" Name="image1" Stretch="Fill" VerticalAlignment="Top" Width="280" 
                Source="/PcgTools;component/Gui/Images/pcgtoolsnormal.jpg"  Margin="4" />

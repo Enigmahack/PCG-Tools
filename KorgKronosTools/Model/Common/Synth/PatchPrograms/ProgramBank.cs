@@ -115,7 +115,7 @@ namespace PcgTools.Model.Common.Synth.PatchPrograms
         /// </summary>
         [UsedImplicitly]
         // ReSharper disable once UnusedMember.Global
-        public string Column2 => SynthesisTypeAsString(BankSynthesisType);
+        public override string Column2 => SynthesisTypeAsString(BankSynthesisType);
 
 
         /// <summary>

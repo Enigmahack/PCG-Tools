@@ -45,6 +45,16 @@ namespace PcgTools.Model.Common.Synth.PatchCombis
         }
 
 
+        private IProgram _cachedUsedProgram;
+        private bool _usedProgramCached;
+
+        protected void InvalidateUsedProgramCache()
+        {
+            _usedProgramCached = false;
+            _cachedUsedProgram = null;
+        }
+
+
         /// <summary>
         /// Used for UI control binding for selections.
         /// </summary>
@@ -253,6 +263,8 @@ namespace PcgTools.Model.Common.Synth.PatchCombis
         {
             get
             {
+                if (_usedProgramCached) return _cachedUsedProgram;
+
                 if (Parent is ISongTimbres)
                 {
                     return null; //TODO Use connected PCG file
@@ -280,13 +292,18 @@ namespace PcgTools.Model.Common.Synth.PatchCombis
                     {
                         var programBank = masterPcgMemory.ProgramBanks.BankCollection.FirstOrDefault(
                             item => (item.PcgId == UsedProgramBank.PcgId) && item.IsFilled);
-                        return programBank == null ? null : programBank[programId] as Program;
+                        _cachedUsedProgram = programBank == null ? null : programBank[programId] as Program;
+                        _usedProgramCached = true;
+                        return _cachedUsedProgram;
                     }
                 }
+                _cachedUsedProgram = program;
+                _usedProgramCached = true;
                 return program;
             }
             set
             {
+                InvalidateUsedProgramCache();
                 Combi.PcgRoot.Content[TimbresOffset] = (byte)value.Index;
                 UsedProgramBank = (ProgramBank) value.Parent;
                 RaisePropertyChanged("UsedProgram", false);

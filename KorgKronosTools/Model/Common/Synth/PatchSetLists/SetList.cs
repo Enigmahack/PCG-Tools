@@ -37,7 +37,7 @@ namespace PcgTools.Model.Common.Synth.PatchSetLists
         /// Used in XAML PCG Window in list view column.
         /// </summary>
         // ReSharper disable once UnusedMember.Global
-        [UsedImplicitly] public string Column2 => Name;
+        [UsedImplicitly] public override string Column2 => Name;
 
 
         /// <summary>

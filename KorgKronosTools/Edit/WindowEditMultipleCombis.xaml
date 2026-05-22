@@ -54,7 +54,7 @@
         </StackPanel>
 
         <StackPanel Orientation="Horizontal">
-            <Label Foreground="#FFD80000" HorizontalAlignment="Left" Margin="4"
+            <Label Foreground="{StaticResource Brush.TextError}" HorizontalAlignment="Left" Margin="4"
                Name="labelError" VerticalAlignment="Top">
                 <Label.Background>
                     <SolidColorBrush />

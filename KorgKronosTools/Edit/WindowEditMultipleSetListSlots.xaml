@@ -46,7 +46,7 @@
                HorizontalAlignment="Left" 
                Margin="4" Name="labelDescription" VerticalAlignment="Top" />
 
-            <TextBlock HorizontalAlignment="Left" Margin="4"  Background="{x:Static SystemColors.ControlLightBrush}" Text="X of y Characters"
+            <TextBlock HorizontalAlignment="Left" Margin="4"  Background="Transparent" Text="X of y Characters"
                Name="labelDescriptionLength" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
         </StackPanel>
 
@@ -56,7 +56,7 @@
                  TextChanged="TextBoxDescriptionTextChanged" AcceptsReturn="True" AcceptsTab="True" Grid.ColumnSpan="2" />
 
         <StackPanel Orientation="Horizontal">
-            <Label Foreground="#FFD80000" HorizontalAlignment="Left" 
+            <Label Foreground="{StaticResource Brush.TextError}" HorizontalAlignment="Left" 
                Margin="4" Name="labelError" 
                VerticalAlignment="Top" Grid.ColumnSpan="2">
                 <Label.Background>
