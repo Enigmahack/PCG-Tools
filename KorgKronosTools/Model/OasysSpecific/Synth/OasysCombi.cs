@@ -1,4 +1,4 @@
-﻿// (c) Copyright 2011-2019 MiKeSoft, Michel Keijzers, All rights reserved
+// (c) Copyright 2011-2019 MiKeSoft, Michel Keijzers, All rights reserved
 
 
 using PcgTools.Model.Common.Synth.OldParameters;
@@ -44,15 +44,15 @@ namespace PcgTools.Model.OasysSpecific.Synth
             switch (name)
             {
                 case ParameterNames.CombiParameterName.Category:
-                    parameter = IntParameter.Instance.Set(PcgRoot, PcgRoot.Content, ByteOffset + 4778, 4, 0, false, this);
+                    parameter = new IntParameter(PcgRoot, PcgRoot.Content, ByteOffset + 4778, 4, 0, false, this);
                     break;
 
                 case ParameterNames.CombiParameterName.SubCategory:
-                    parameter = IntParameter.Instance.Set(PcgRoot, PcgRoot.Content, ByteOffset + 4778, 7, 5, false, this);
+                    parameter = new IntParameter(PcgRoot, PcgRoot.Content, ByteOffset + 4778, 7, 5, false, this);
                     break;
 
                 case ParameterNames.CombiParameterName.Tempo:
-                    parameter = WordParameter.Instance.Set(PcgRoot, PcgRoot.Content, ByteOffset + 1292, false, 100, this);
+                    parameter = new WordParameter(PcgRoot, PcgRoot.Content, ByteOffset + 1292, false, 100, this);
                     break;
 
                 default:

@@ -265,6 +265,18 @@
     <value>_Compact</value>
     <comment>Compact a combi (button and menu item)</comment>
   </data>
+  <data name="Defrag" xml:space="preserve">
+    <value>_Defrag</value>
+    <comment>Defrag menu item: dedup all programs/combis then compact</comment>
+  </data>
+  <data name="DefragSelected" xml:space="preserve">
+    <value>Remove duplicate programs and combis across all banks, then compact</value>
+    <comment>Tool tip for Defrag</comment>
+  </data>
+  <data name="DefragInProgress" xml:space="preserve">
+    <value>A defrag is currently in progress. Please wait until it completes before making changes.</value>
+    <comment>Warning shown when user tries to Cut/Copy/Paste/MoveUp/MoveDown during defrag</comment>
+  </data>
   <data name="CompactSelected" xml:space="preserve">
     <value>Compact the selected patch(es) or bankPcgId(s)</value>
     <comment>Tool tip</comment>

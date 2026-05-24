@@ -1,4 +1,4 @@
-﻿// (c) Copyright 2011-2019 MiKeSoft, Michel Keijzers, All rights reserved
+// (c) Copyright 2011-2019 MiKeSoft, Michel Keijzers, All rights reserved
 
 using PcgTools.Model.Common.Synth.Meta;
 using PcgTools.Model.Common.Synth.OldParameters;
@@ -74,7 +74,7 @@ namespace PcgTools.Model.TrinitySpecific.Synth
             switch (name)
             {
                 case ParameterNames.CombiParameterName.Category:
-                    parameter = IntParameter.Instance.Set(
+                    parameter = new IntParameter(
                         PcgRoot, PcgRoot.Content, ByteOffset + 16,
                         Settings.Default.TrinityCategorySetA ? 3 : 7,
                         Settings.Default.TrinityCategorySetA ? 0 : 4,
@@ -83,7 +83,7 @@ namespace PcgTools.Model.TrinitySpecific.Synth
 
                 case ParameterNames.CombiParameterName.Tempo:
                     // Tempo on a Triton is only 1 byte (int) iso 2 for M series, Oasys/Kronos and is a float.
-                    parameter = IntParameter.Instance.Set(PcgRoot, PcgRoot.Content, ByteOffset + 541, 7, 0, false, this);
+                    parameter = new IntParameter(PcgRoot, PcgRoot.Content, ByteOffset + 541, 7, 0, false, this);
                     break;
 
                 default:

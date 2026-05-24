@@ -1,4 +1,4 @@
-﻿// (c) Copyright 2011-2019 MiKeSoft, Michel Keijzers, All rights reserved
+// (c) Copyright 2011-2019 MiKeSoft, Michel Keijzers, All rights reserved
 
 using System.Diagnostics;
 using PcgTools.Model.Common.Synth.MemoryAndFactory;
@@ -7,16 +7,10 @@ using PcgTools.Model.Common.Synth.Meta;
 namespace PcgTools.Model.Common.Synth.OldParameters
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public class WordParameter : Parameter
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        static WordParameter _instance;
-
-
         /// <summary>
         /// True if Little endian, false if Big endian.
         /// </summary>
@@ -24,34 +18,19 @@ namespace PcgTools.Model.Common.Synth.OldParameters
 
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         private int _multiplication;
 
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
-        public static WordParameter Instance => _instance ?? (_instance = new WordParameter());
-
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="memory"></param>
-        /// <param name="pcgData"></param>
-        /// <param name="pcgOffset"></param>
-        /// <param name="reverseOrder"></param>
-        /// <param name="multiplication"></param>
-        /// <param name="patch"></param>
-        /// <returns></returns>
-        public WordParameter Set(IMemory memory, byte[] pcgData, int pcgOffset, bool reverseOrder, int multiplication, IPatch patch)
+        public WordParameter(IMemory memory, byte[] pcgData, int pcgOffset, bool reverseOrder, int multiplication, IPatch patch)
         {
             Set(memory, pcgData, pcgOffset, patch);
             _multiplication = multiplication;
             _reverseOrder = reverseOrder;
-
-            return this;
         }
 
 

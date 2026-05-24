@@ -1166,7 +1166,34 @@ namespace PcgTools.PcgToolsResources {
                 return ResourceManager.GetString("Compact", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized string similar to _Defrag.
+        /// </summary>
+        public static string Defrag {
+            get {
+                return ResourceManager.GetString("Defrag", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Remove duplicate programs and combis across all banks, then compact.
+        /// </summary>
+        public static string DefragSelected {
+            get {
+                return ResourceManager.GetString("DefragSelected", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to A defrag is currently in progress. Please wait until it completes before making changes.
+        /// </summary>
+        public static string DefragInProgress {
+            get {
+                return ResourceManager.GetString("DefragInProgress", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to Compact.
         /// </summary>

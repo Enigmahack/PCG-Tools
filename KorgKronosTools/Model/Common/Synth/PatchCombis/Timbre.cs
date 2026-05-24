@@ -1,4 +1,4 @@
-﻿// (c) Copyright 2011-2019 MiKeSoft, Michel Keijzers, All rights reserved
+// (c) Copyright 2011-2019 MiKeSoft, Michel Keijzers, All rights reserved
 
 using System;
 using System.ComponentModel;
@@ -140,27 +140,27 @@ namespace PcgTools.Model.Common.Synth.PatchCombis
             switch (name)
             {
                 case ParameterNames.TimbreParameterName.Volume:
-                    parameter = IntParameter.Instance.Set(
+                    parameter = new IntParameter(
                         Root, Root.Content, TimbresOffset + 5, 7, 0, false, Parent as IPatch);
                     break;
 
                 case ParameterNames.TimbreParameterName.MidiChannel:
-                    parameter = IntParameter.Instance.Set(
+                    parameter = new IntParameter(
                         Root, Root.Content, TimbresOffset + 2, 4, 0, false, Parent as IPatch);
                     break;
 
                 case ParameterNames.TimbreParameterName.Transpose:
-                    parameter = IntParameter.Instance.Set(
+                    parameter = new IntParameter(
                         Root, Root.Content, TimbresOffset + 7, 7, 0, true, Parent as IPatch);
                     break;
 
                 case ParameterNames.TimbreParameterName.Detune:
-                    parameter = IntParameter.Instance.SetMultiBytes(
+                    parameter = new IntParameter(
                         Root, Root.Content, TimbresOffset + 8, 2, true, true, Parent as IPatch);
                     break;
 
                 case ParameterNames.TimbreParameterName.BendRange:
-                    parameter = IntParameter.Instance.Set(
+                    parameter = new IntParameter(
                         Root, Root.Content, TimbresOffset + 6, 7, 0, true, Parent as IPatch);
                     break;
 

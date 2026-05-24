@@ -867,15 +867,15 @@
                     </Grid>
 
                     <ControlTemplate.Triggers>
-                        <!-- Show correct layout for each role -->
+                        <!-- Show correct layout for each role (fires once at item creation) -->
                         <Trigger Property="Role" Value="TopLevelHeader">
-                            <Setter TargetName="TopBd"  Property="Visibility" Value="Visible"/>
-                            <Setter TargetName="SubBd"  Property="Visibility" Value="Collapsed"/>
-                            <Setter TargetName="PART_Popup" Property="Placement" Value="Bottom"/>
+                            <Setter TargetName="TopBd"      Property="Visibility" Value="Visible"/>
+                            <Setter TargetName="SubBd"      Property="Visibility" Value="Collapsed"/>
+                            <Setter TargetName="PART_Popup" Property="Placement"  Value="Bottom"/>
                         </Trigger>
                         <Trigger Property="Role" Value="TopLevelItem">
-                            <Setter TargetName="TopBd"  Property="Visibility" Value="Visible"/>
-                            <Setter TargetName="SubBd"  Property="Visibility" Value="Collapsed"/>
+                            <Setter TargetName="TopBd" Property="Visibility" Value="Visible"/>
+                            <Setter TargetName="SubBd" Property="Visibility" Value="Collapsed"/>
                         </Trigger>
                         <Trigger Property="Role" Value="SubmenuHeader">
                             <Setter TargetName="TopBd"      Property="Visibility" Value="Collapsed"/>
@@ -889,44 +889,17 @@
                             <Setter TargetName="TopBd" Property="Visibility" Value="Collapsed"/>
                             <Setter TargetName="SubBd" Property="Visibility" Value="Visible"/>
                         </Trigger>
-                        <!-- Hover on top-level -->
-                        <MultiTrigger>
-                            <MultiTrigger.Conditions>
-                                <Condition Property="IsHighlighted" Value="True"/>
-                                <Condition Property="Role"          Value="TopLevelHeader"/>
-                            </MultiTrigger.Conditions>
+                        <!-- Hover: TopBd and SubBd are mutually exclusive by Visibility, so only
+                             the one currently shown by the Role trigger above will be visible.
+                             Top-level items see Brush.Hover; submenu items see Brush.ListSelected. -->
+                        <Trigger Property="IsHighlighted" Value="True">
                             <Setter TargetName="TopBd" Property="Background" Value="{StaticResource Brush.Hover}"/>
-                        </MultiTrigger>
-                        <MultiTrigger>
-                            <MultiTrigger.Conditions>
-                                <Condition Property="IsHighlighted" Value="True"/>
-                                <Condition Property="Role"          Value="TopLevelItem"/>
-                            </MultiTrigger.Conditions>
-                            <Setter TargetName="TopBd" Property="Background" Value="{StaticResource Brush.Hover}"/>
-                        </MultiTrigger>
-                        <!-- Open submenu on top-level -->
-                        <MultiTrigger>
-                            <MultiTrigger.Conditions>
-                                <Condition Property="IsSubmenuOpen" Value="True"/>
-                                <Condition Property="Role"          Value="TopLevelHeader"/>
-                            </MultiTrigger.Conditions>
+                            <Setter TargetName="SubBd" Property="Background" Value="{StaticResource Brush.ListSelected}"/>
+                        </Trigger>
+                        <!-- Open submenu indicator on top-level (TopBd is only visible for top-level roles) -->
+                        <Trigger Property="IsSubmenuOpen" Value="True">
                             <Setter TargetName="TopBd" Property="Background" Value="{StaticResource Brush.ListSelected}"/>
-                        </MultiTrigger>
-                        <!-- Hover on submenu items -->
-                        <MultiTrigger>
-                            <MultiTrigger.Conditions>
-                                <Condition Property="IsHighlighted" Value="True"/>
-                                <Condition Property="Role"          Value="SubmenuItem"/>
-                            </MultiTrigger.Conditions>
-                            <Setter TargetName="SubBd" Property="Background" Value="{StaticResource Brush.ListSelected}"/>
-                        </MultiTrigger>
-                        <MultiTrigger>
-                            <MultiTrigger.Conditions>
-                                <Condition Property="IsHighlighted" Value="True"/>
-                                <Condition Property="Role"          Value="SubmenuHeader"/>
-                            </MultiTrigger.Conditions>
-                            <Setter TargetName="SubBd" Property="Background" Value="{StaticResource Brush.ListSelected}"/>
-                        </MultiTrigger>
+                        </Trigger>
                         <!-- Checked state -->
                         <Trigger Property="IsChecked" Value="True">
                             <Setter TargetName="CheckMark" Property="Visibility" Value="Visible"/>

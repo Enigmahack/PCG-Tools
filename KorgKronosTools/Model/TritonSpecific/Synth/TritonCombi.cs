@@ -1,4 +1,4 @@
-﻿// (c) Copyright 2011-2019 MiKeSoft, Michel Keijzers, All rights reserved
+// (c) Copyright 2011-2019 MiKeSoft, Michel Keijzers, All rights reserved
 
 using PcgTools.Model.Common.Synth.OldParameters;
 using PcgTools.Model.Common.Synth.PatchCombis;
@@ -64,7 +64,7 @@ namespace PcgTools.Model.TritonSpecific.Synth
             {
             case ParameterNames.CombiParameterName.Tempo:
                 // Tempo on a Triton is only 1 byte (int) iso 2 for M series, Oasys/Kronos and is a float.
-                    parameter = IntParameter.Instance.Set(PcgRoot, PcgRoot.Content, ByteOffset + 192, 7, 0, false, this);
+                    parameter = new IntParameter(PcgRoot, PcgRoot.Content, ByteOffset + 192, 7, 0, false, this);
                 break;
 
             default:

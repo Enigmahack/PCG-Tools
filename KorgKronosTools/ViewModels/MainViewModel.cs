@@ -33,7 +33,7 @@ namespace PcgTools.ViewModels
         /// <summary>
         /// 
         /// </summary>
-        public const string Version = "3.1.0";
+        public const string Version = "3.3.0";
 
 
         /// <summary>

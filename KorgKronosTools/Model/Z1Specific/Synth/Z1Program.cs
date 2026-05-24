@@ -69,8 +69,7 @@ namespace PcgTools.Model.Z1Specific.Synth
                 // No OSC Mode
 
                 case ParameterNames.ProgramParameterName.Category:
-                    parameter = new FixedParameter();
-                    ((FixedParameter)parameter).Set(PcgRoot, PcgRoot.Content, FixedParameter.EType.Category, this);
+                    parameter = new FixedParameter(PcgRoot, PcgRoot.Content, FixedParameter.EType.Category, this);
                     break;
             }
 

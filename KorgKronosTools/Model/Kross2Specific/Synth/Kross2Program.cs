@@ -1,4 +1,4 @@
-﻿// (c) Copyright 2011-2019 MiKeSoft, Michel Keijzers, All rights reserved
+// (c) Copyright 2011-2019 MiKeSoft, Michel Keijzers, All rights reserved
 
 
 using System.Collections.Generic;
@@ -39,16 +39,16 @@ namespace PcgTools.Model.Kross2Specific.Synth
             switch (name)
             {
                 case ParameterNames.ProgramParameterName.OscMode:
-                    parameter = EnumParameter.Instance.Set(Root, Root.Content, ByteOffset + 1288, 2, 0,
+                    parameter = new EnumParameter(Root, Root.Content, ByteOffset + 1288, 2, 0,
                         new List<string> {"Single", "Double", "Drums"}, this);
                     break;
 
                 case ParameterNames.ProgramParameterName.Category:
-                    parameter = IntParameter.Instance.Set(Root, Root.Content, ByteOffset + 1298, 4, 0, false, this);
+                    parameter = new IntParameter(Root, Root.Content, ByteOffset + 1298, 4, 0, false, this);
                     break;
 
                 case ParameterNames.ProgramParameterName.SubCategory:
-                    parameter = IntParameter.Instance.Set(Root, Root.Content, ByteOffset + 1298, 7, 5, false, this);
+                    parameter = new IntParameter(Root, Root.Content, ByteOffset + 1298, 7, 5, false, this);
                     break;
 
                 default:

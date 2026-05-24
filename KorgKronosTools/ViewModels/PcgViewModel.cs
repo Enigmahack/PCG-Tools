@@ -8,6 +8,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Common.Mvvm;
 using Common.Utils;
@@ -163,9 +164,46 @@ namespace PcgTools.ViewModels
 
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public Action UpdateTimbresWindows { get; set; }
+
+
+        /// <summary>
+        /// True while Defrag is running; drives the progress overlay visibility.
+        /// </summary>
+        private bool _isDefragRunning;
+        // Must only be set from the UI thread or an await continuation so OnPropertyChanged fires on the dispatcher.
+        public bool IsDefragRunning
+        {
+            get { return _isDefragRunning; }
+            private set
+            {
+                if (_isDefragRunning != value)
+                {
+                    _isDefragRunning = value;
+                    OnPropertyChanged("IsDefragRunning");
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// Current Defrag phase label shown in the progress overlay.
+        /// </summary>
+        private string _defragStatusText;
+        public string DefragStatusText
+        {
+            get { return _defragStatusText; }
+            private set
+            {
+                if (_defragStatusText != value)
+                {
+                    _defragStatusText = value;
+                    OnPropertyChanged("DefragStatusText");
+                }
+            }
+        }
 
 
         /// <summary>
@@ -1927,6 +1965,13 @@ namespace PcgTools.ViewModels
         /// </summary>
         void Cut()
         {
+            if (IsDefragRunning)
+            {
+                ShowMessageBox(Strings.DefragInProgress, Strings.PcgTools,
+                    WindowUtils.EMessageBoxButton.Ok, WindowUtils.EMessageBoxImage.Warning,
+                    WindowUtils.EMessageBoxResult.Ok);
+                return;
+            }
             try
             {
                 SetCursor(WindowUtils.ECursor.Wait);
@@ -1987,6 +2032,13 @@ namespace PcgTools.ViewModels
         /// </summary>
         void Copy()
         {
+            if (IsDefragRunning)
+            {
+                ShowMessageBox(Strings.DefragInProgress, Strings.PcgTools,
+                    WindowUtils.EMessageBoxButton.Ok, WindowUtils.EMessageBoxImage.Warning,
+                    WindowUtils.EMessageBoxResult.Ok);
+                return;
+            }
             try
             {
                 SetCursor(WindowUtils.ECursor.Wait);
@@ -2099,6 +2151,13 @@ namespace PcgTools.ViewModels
         /// </summary>
         void Paste()
         {
+            if (IsDefragRunning)
+            {
+                ShowMessageBox(Strings.DefragInProgress, Strings.PcgTools,
+                    WindowUtils.EMessageBoxButton.Ok, WindowUtils.EMessageBoxImage.Warning,
+                    WindowUtils.EMessageBoxResult.Ok);
+                return;
+            }
             try
             {
                 SetCursor(WindowUtils.ECursor.Wait);
@@ -2473,6 +2532,13 @@ namespace PcgTools.ViewModels
         /// </summary>
         void MoveUp()
         {
+            if (IsDefragRunning)
+            {
+                ShowMessageBox(Strings.DefragInProgress, Strings.PcgTools,
+                    WindowUtils.EMessageBoxButton.Ok, WindowUtils.EMessageBoxImage.Warning,
+                    WindowUtils.EMessageBoxResult.Ok);
+                return;
+            }
             GetSelectedPatchListViewIndex(); //IMPR: Needed?
 
             for (var index = 0; index < Patches.Count; index++)
@@ -2578,6 +2644,13 @@ namespace PcgTools.ViewModels
         /// </summary>
         void MoveDown()
         {
+            if (IsDefragRunning)
+            {
+                ShowMessageBox(Strings.DefragInProgress, Strings.PcgTools,
+                    WindowUtils.EMessageBoxButton.Ok, WindowUtils.EMessageBoxImage.Warning,
+                    WindowUtils.EMessageBoxResult.Ok);
+                return;
+            }
             GetSelectedPatchListViewIndex(); //IMPR: Needed?
 
             for (var index = Patches.Count - 1; index >= 0; index--)
@@ -3322,7 +3395,7 @@ namespace PcgTools.ViewModels
                 ? Banks.Where(bank => bank.IsSelected).SelectMany(bank => bank.Patches)
                 : Patches.Where(patch => patch.IsSelected)).ToList();
 
-            if (_clearCommands.ClearDuplicatesPatches(this, selectedPatches))
+            if (_clearCommands.ClearDuplicatesPatches(this, selectedPatches) > 0)
             {
                 UpdateTimbresWindows();
             }
@@ -3439,7 +3512,137 @@ namespace PcgTools.ViewModels
 
 
         /// <summary>
-        /// 
+        ///
+        /// </summary>
+        ICommand _defragCommand;
+
+
+        /// <summary>
+        ///
+        /// </summary>
+        [UsedImplicitly]
+        // ReSharper disable once UnusedMember.Global
+        public ICommand DefragCommand
+        {
+            get
+            {
+                return _defragCommand ?? (_defragCommand = new RelayCommand(param => Defrag(),
+                    param => CanExecuteDefragCommand));
+            }
+        }
+
+
+        /// <summary>
+        ///
+        /// </summary>
+        private bool CanExecuteDefragCommand =>
+            (SelectedPcgMemory != null) &&
+            (!PcgClipBoard.PasteDuplicatesExecuted || PcgClipBoard.IsEmpty) &&
+            !IsDefragRunning;
+
+
+        /// <summary>
+        /// Removes duplicate programs and combis across all non-GM banks, rewires all references
+        /// (including set-list slots), then compacts each bank group so cleared slots move to the end.
+        /// Each heavy phase runs on a background thread via Task.Run; status text and flags are
+        /// set on the UI thread in the await continuations. Shows a summary dialog on completion.
+        /// </summary>
+        private async void Defrag()
+        {
+            SetCursor(WindowUtils.ECursor.Wait);
+            IsDefragRunning = true;
+            var programsCleared = 0;
+            var combisCleared = 0;
+
+            try
+            {
+                // Collect patch lists on the UI thread (read-only access to ViewModel state).
+                var allPrograms = SelectedPcgMemory.ProgramBanks.BankCollection
+                    .Cast<IBank>()
+                    .Where(bank => bank.Type != BankType.EType.Gm && bank.IsLoaded)
+                    .SelectMany(bank => bank.Patches)
+                    .ToList();
+
+                var allCombis = (SelectedPcgMemory.CombiBanks != null)
+                    ? SelectedPcgMemory.CombiBanks.BankCollection
+                        .Cast<IBank>()
+                        .Where(bank => bank.Type != BankType.EType.Gm && bank.IsLoaded)
+                        .SelectMany(bank => bank.Patches)
+                        .ToList()
+                    : new List<IPatch>();
+
+                DefragStatusText = "Removing duplicate programs...";
+                programsCleared = await Task.Run(() => _clearCommands.ClearDuplicatesPatches(this, allPrograms));
+
+                DefragStatusText = "Removing duplicate combis...";
+                combisCleared = await Task.Run(() => _clearCommands.ClearDuplicatesPatches(this, allCombis));
+
+                DefragStatusText = "Compacting programs...";
+                var programLists = BuildDefragProgramProcessList().ToList();
+                await Task.Run(() => { foreach (var list in programLists) CompactList(list); });
+
+                DefragStatusText = "Compacting combis...";
+                var combiList = BuildDefragCombiProcessList();
+                if (combiList.Count > 0)
+                    await Task.Run(() => CompactList(combiList));
+            }
+            finally
+            {
+                IsDefragRunning = false;
+                SetCursor(WindowUtils.ECursor.Arrow);
+            }
+
+            UpdateTimbresWindows();
+
+            ShowMessageBox(
+                $"Defrag complete.\n\nDuplicate programs removed: {programsCleared}\nDuplicate combis removed: {combisCleared}\nTotal slots freed: {programsCleared + combisCleared}",
+                Strings.PcgTools,
+                WindowUtils.EMessageBoxButton.Ok,
+                WindowUtils.EMessageBoxImage.Information,
+                WindowUtils.EMessageBoxResult.Ok);
+        }
+
+
+        /// <summary>
+        /// Builds one list per synthesis type containing all patches from non-GM, loaded program banks.
+        /// </summary>
+        private IEnumerable<List<IPatch>> BuildDefragProgramProcessList()
+        {
+            var listToProcess = new List<List<IPatch>>();
+            for (var i = 0; i < (int) ProgramBank.SynthesisType.Last; i++)
+            {
+                listToProcess.Add(new List<IPatch>());
+            }
+
+            foreach (IBank bank in SelectedPcgMemory.ProgramBanks.BankCollection)
+            {
+                if (bank.Type == BankType.EType.Gm || !bank.IsLoaded) continue;
+                var listToUse = listToProcess[(int) ((IProgramBank) bank).BankSynthesisType];
+                listToUse.AddRange(bank.Patches);
+            }
+
+            return listToProcess.Where(list => list.Count > 0);
+        }
+
+
+        /// <summary>
+        /// Builds a flat list of all patches from non-GM, loaded combi banks.
+        /// </summary>
+        private List<IPatch> BuildDefragCombiProcessList()
+        {
+            var list = new List<IPatch>();
+            if (SelectedPcgMemory.CombiBanks == null) return list;
+            foreach (IBank bank in SelectedPcgMemory.CombiBanks.BankCollection)
+            {
+                if (bank.Type == BankType.EType.Gm || !bank.IsLoaded) continue;
+                list.AddRange(bank.Patches);
+            }
+            return list;
+        }
+
+
+        /// <summary>
+        ///
         /// </summary>
         ICommand _showTimbresCommand;
 

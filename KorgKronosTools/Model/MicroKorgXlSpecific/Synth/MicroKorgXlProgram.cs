@@ -85,13 +85,11 @@ namespace PcgTools.Model.MicroKorgXlSpecific.Synth
                 // No OSC Mode
 
                 case ParameterNames.ProgramParameterName.Category:
-                    parameter = new FixedParameter();
-                    ((FixedParameter)parameter).Set(PcgRoot, PcgRoot.Content, FixedParameter.EType.Genre, this);
+                    parameter = new FixedParameter(PcgRoot, PcgRoot.Content, FixedParameter.EType.Genre, this);
                     break;
 
                 case ParameterNames.ProgramParameterName.SubCategory:
-                    parameter = new FixedParameter();
-                    ((FixedParameter)parameter).Set(PcgRoot, PcgRoot.Content, FixedParameter.EType.Category, this);
+                    parameter = new FixedParameter(PcgRoot, PcgRoot.Content, FixedParameter.EType.Category, this);
                     break;
 
                 default:

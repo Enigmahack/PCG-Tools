@@ -103,13 +103,11 @@ namespace PcgTools.Model.Ms2000Specific.Synth
                 // No OSC Mode
 
                 case ParameterNames.ProgramParameterName.Category:
-                    parameter = new FixedParameter();
-                    ((FixedParameter)parameter).Set(PcgRoot, PcgRoot.Content, FixedParameter.EType.Category, this);
+                    parameter = new FixedParameter(PcgRoot, PcgRoot.Content, FixedParameter.EType.Category, this);
                     break;
 
                 case ParameterNames.ProgramParameterName.Mode:
-                    parameter = new FixedParameter();
-                    ((FixedParameter)parameter).Set(PcgRoot, PcgRoot.Content, FixedParameter.EType.Mode, this);
+                    parameter = new FixedParameter(PcgRoot, PcgRoot.Content, FixedParameter.EType.Mode, this);
                     break;
 
                 default:

@@ -1,4 +1,4 @@
-﻿// (c) Copyright 2011-2019 MiKeSoft, Michel Keijzers, All rights reserved
+// (c) Copyright 2011-2019 MiKeSoft, Michel Keijzers, All rights reserved
 
 using System.Collections.Generic;
 using PcgTools.Model.Common;
@@ -43,7 +43,7 @@ namespace PcgTools.Model.Z1Specific.Synth
             switch (name)
             {
                 case ParameterNames.TimbreParameterName.Status: // Voice Reserve Total, 0 = OFF, 1~18 = reserve voice value (5 bytes), treat all as Int
-                    parameter = EnumParameter.Instance.Set(
+                    parameter = new EnumParameter(
                         PcgRoot, Combi.PcgRoot.Content, TimbresOffset + 1, 4, 0, new List<string>
                     {
                         "Off", "Int", "Int", "Int", "Int", "Int", "Int", "Int", "Int", // 1~8
@@ -52,42 +52,42 @@ namespace PcgTools.Model.Z1Specific.Synth
                     break;
                     
                 case ParameterNames.TimbreParameterName.TopKey:
-                    parameter = IntParameter.Instance.Set(
+                    parameter = new IntParameter(
                         PcgRoot, Combi.PcgRoot.Content, TimbresOffset + 8, 7, 0, false, Parent as IPatch);
                     break;
 
                 case ParameterNames.TimbreParameterName.BottomKey:
-                    parameter = IntParameter.Instance.Set(
+                    parameter = new IntParameter(
                         PcgRoot, Combi.PcgRoot.Content, TimbresOffset + 9, 7, 0, false, Parent as IPatch);
                     break;
 
                 case ParameterNames.TimbreParameterName.TopVelocity:
-                    parameter = IntParameter.Instance.Set(
+                    parameter = new IntParameter(
                         PcgRoot, Combi.PcgRoot.Content, TimbresOffset + 10, 7, 0, false, Parent as IPatch);
                     break;
 
                 case ParameterNames.TimbreParameterName.BottomVelocity:
-                    parameter = IntParameter.Instance.Set(
+                    parameter = new IntParameter(
                         PcgRoot, Combi.PcgRoot.Content, TimbresOffset + 11, 7, 0, false, Parent as IPatch);
                     break;
 
                 case ParameterNames.TimbreParameterName.Volume: // Output level
-                    parameter = IntParameter.Instance.Set(
+                    parameter = new IntParameter(
                         PcgRoot, Combi.PcgRoot.Content, TimbresOffset + 5, 7, 0, false, Parent as IPatch);
                     break;
 
                 case ParameterNames.TimbreParameterName.MidiChannel:
-                    parameter = IntParameter.Instance.Set(
+                    parameter = new IntParameter(
                         PcgRoot, Combi.PcgRoot.Content, TimbresOffset + 12, 4, 0, false, Parent as IPatch);
                     break;
 
                 case ParameterNames.TimbreParameterName.Transpose:
-                    parameter = IntParameter.Instance.Set(
+                    parameter = new IntParameter(
                         PcgRoot, Combi.PcgRoot.Content, TimbresOffset + 2, 7, 0, true, Parent as IPatch);
                     break;
 
                 case ParameterNames.TimbreParameterName.BendRange: // Detune
-                    parameter = IntParameter.Instance.Set(
+                    parameter = new IntParameter(
                         PcgRoot, Combi.PcgRoot.Content, TimbresOffset + 3, 7, 0, true, Parent as IPatch);
                     break;
 

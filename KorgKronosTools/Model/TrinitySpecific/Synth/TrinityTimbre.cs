@@ -1,4 +1,4 @@
-﻿// (c) Copyright 2011-2019 MiKeSoft, Michel Keijzers, All rights reserved
+// (c) Copyright 2011-2019 MiKeSoft, Michel Keijzers, All rights reserved
 
 using System.Collections.Generic;
 
@@ -41,39 +41,39 @@ namespace PcgTools.Model.TrinitySpecific.Synth
             switch (name)
             {
                 case ParameterNames.TimbreParameterName.Status: // Called Timbre Mode
-                    parameter = EnumParameter.Instance.Set(
+                    parameter = new EnumParameter(
                      PcgRoot, Combi.PcgRoot.Content, TimbresOffset + 2, 6, 5, 
                      new List<string> { "Int", "Off", "Both", "Ext" }, Parent as IPatch);
                     break;
 
                 case ParameterNames.TimbreParameterName.TopKey:
-                    parameter = IntParameter.Instance.Set(
+                    parameter = new IntParameter(
                         PcgRoot, Combi.PcgRoot.Content, TimbresOffset + 12, 7, 0, false, Parent as IPatch);
                     break;
 
                 case ParameterNames.TimbreParameterName.BottomKey:
-                    parameter = IntParameter.Instance.Set(
+                    parameter = new IntParameter(
                         PcgRoot, Combi.PcgRoot.Content, TimbresOffset + 13, 7, 0, false, Parent as IPatch);
                     break;
 
                 case ParameterNames.TimbreParameterName.TopVelocity:
-                    parameter = IntParameter.Instance.Set(
+                    parameter = new IntParameter(
                         PcgRoot, Combi.PcgRoot.Content, TimbresOffset + 15, 7, 0, false, Parent as IPatch);
                     break;
 
                 case ParameterNames.TimbreParameterName.BottomVelocity:
-                    parameter = IntParameter.Instance.Set(
+                    parameter = new IntParameter(
                         PcgRoot, Combi.PcgRoot.Content, TimbresOffset + 16, 7, 0, false, Parent as IPatch);
                     break;
 
                 case ParameterNames.TimbreParameterName.OscMode:
-                    parameter = EnumParameter.Instance.Set(
+                    parameter = new EnumParameter(
                         PcgRoot, Combi.PcgRoot.Content, TimbresOffset + 11, 6, 6, new List<string> { "Prg", "Force Poly" },
                         Parent as IPatch);
                     break;
 
                 case ParameterNames.TimbreParameterName.OscSelect:
-                    parameter = EnumParameter.Instance.Set(
+                    parameter = new EnumParameter(
                         PcgRoot, Combi.PcgRoot.Content, TimbresOffset + 11, 5, 5, new List<string> { "Both", "Hide OSC2" },
                         Parent as IPatch);
                     break;
@@ -81,24 +81,24 @@ namespace PcgTools.Model.TrinitySpecific.Synth
                 // No portamento.
 
                 case ParameterNames.TimbreParameterName.Volume:
-                    parameter = IntParameter.Instance.Set(
+                    parameter = new IntParameter(
                         PcgRoot, Combi.PcgRoot.Content, TimbresOffset + 3, 7, 0, false, 
                         Parent as IPatch);
                     break;
 
                 case ParameterNames.TimbreParameterName.MidiChannel:
-                    parameter = IntParameter.Instance.Set(
+                    parameter = new IntParameter(
                         PcgRoot, Combi.PcgRoot.Content, TimbresOffset + 2, 4, 0, false,
                         Parent as IPatch);
                     break;
 
                 case ParameterNames.TimbreParameterName.Transpose:
-                    parameter = IntParameter.Instance.Set(
+                    parameter = new IntParameter(
                         PcgRoot, Combi.PcgRoot.Content, TimbresOffset + 5, 7, 0, true, Parent as IPatch);
                     break;
 
                 case ParameterNames.TimbreParameterName.BendRange:
-                    parameter = IntParameter.Instance.Set(
+                    parameter = new IntParameter(
                         PcgRoot, Combi.PcgRoot.Content, TimbresOffset + 4, 7, 0, true, Parent as IPatch);
                     break;
 

@@ -1,4 +1,4 @@
-﻿// (c) Copyright 2011-2019 MiKeSoft, Michel Keijzers, All rights reserved
+// (c) Copyright 2011-2019 MiKeSoft, Michel Keijzers, All rights reserved
 
 
 using PcgTools.Model.Common.Synth.OldParameters;
@@ -44,23 +44,23 @@ namespace PcgTools.Model.M50Specific.Synth
             switch (name)
             {
             case ParameterNames.CombiParameterName.Category:
-                    parameter = IntParameter.Instance.Set(PcgRoot, PcgRoot.Content, ByteOffset + 824, 4, 0, false, this);
+                    parameter = new IntParameter(PcgRoot, PcgRoot.Content, ByteOffset + 824, 4, 0, false, this);
                 break;
 
             case ParameterNames.CombiParameterName.SubCategory:
-                parameter = IntParameter.Instance.Set(PcgRoot, PcgRoot.Content, ByteOffset + 824, 7, 5, false, this);
+                parameter = new IntParameter(PcgRoot, PcgRoot.Content, ByteOffset + 824, 7, 5, false, this);
                 break;
 
             case ParameterNames.CombiParameterName.Tempo:
-                parameter = WordParameter.Instance.Set(PcgRoot, PcgRoot.Content, ByteOffset + 792, false, 100, this);
+                parameter = new WordParameter(PcgRoot, PcgRoot.Content, ByteOffset + 792, false, 100, this);
                 break;
 
             case ParameterNames.CombiParameterName.DrumTrackCommonPatternNumber:
-                parameter = WordParameter.Instance.Set(Root, Root.Content, ByteOffset + 636, false, 1, this);
+                parameter = new WordParameter(Root, Root.Content, ByteOffset + 636, false, 1, this);
                 break;
 
             case ParameterNames.CombiParameterName.DrumTrackCommonPatternBank:
-                parameter = IntParameter.Instance.Set(Root, Root.Content, ByteOffset + 638, 1, 0, false, this);
+                parameter = new IntParameter(Root, Root.Content, ByteOffset + 638, 1, 0, false, this);
                 break;
 
             default:

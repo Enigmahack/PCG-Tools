@@ -186,9 +186,9 @@ namespace PcgTools.ViewModels.Commands.PcgCommands
         /// <param name="pcgViewModel"></param>
         /// <param name="selectedPatches"></param>
         /// <returns>True if at least one patch cleared</returns>
-        internal bool ClearDuplicatesPatches(PcgViewModel pcgViewModel, List<IPatch> selectedPatches)
+        internal int ClearDuplicatesPatches(PcgViewModel pcgViewModel, List<IPatch> selectedPatches)
         {
-            var atLeastOneCleared = false;
+            var cleared = 0;
 
             var reversedSelectedPatches = selectedPatches;
             reversedSelectedPatches.Reverse();
@@ -199,11 +199,11 @@ namespace PcgTools.ViewModels.Commands.PcgCommands
                 {
                     ((IReferencable) (patch)).ChangeReferences(firstDuplicate);
                     patch.Clear();
-                    atLeastOneCleared = true;
+                    cleared++;
                 }
             }
 
-            return atLeastOneCleared;
+            return cleared;
         }
     }
 }

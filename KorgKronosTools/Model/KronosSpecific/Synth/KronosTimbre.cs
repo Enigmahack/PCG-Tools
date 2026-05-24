@@ -1,4 +1,4 @@
-﻿// (c) Copyright 2011-2019 MiKeSoft, Michel Keijzers, All rights reserved
+// (c) Copyright 2011-2019 MiKeSoft, Michel Keijzers, All rights reserved
 
 
 using PcgTools.Model.Common.Synth.MemoryAndFactory;
@@ -45,7 +45,7 @@ namespace PcgTools.Model.KronosSpecific.Synth
             switch (name)
             {
             case ParameterNames.TimbreParameterName.Detune:
-                parameter = IntParameter.Instance.SetMultiBytes(
+                parameter = new IntParameter(
                     Root, Root.Content, TimbresOffset + 8, 2, false, true, Parent as IPatch);
                 break;
 

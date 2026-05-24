@@ -1,4 +1,4 @@
-﻿// (c) Copyright 2011-2019 MiKeSoft, Michel Keijzers, All rights reserved
+// (c) Copyright 2011-2019 MiKeSoft, Michel Keijzers, All rights reserved
 
 using System;
 using System.Collections.Generic;
@@ -109,10 +109,8 @@ namespace PcgTools.Model.KronosSpecific.Synth
         /// <returns></returns>
         private string GetMsType(int osc, int zone)
         {
-            var parameter = new EnumParameter();
-            parameter.Set(Root, Root.Content, ByteOffset + 2774 + osc*(3240 - 2774) + zone*(2796 - 2774), 1, 0,
-                new List<string> {"Off", "MS", "Wave Sequence"}, this);
-            return parameter.Value;
+            return new EnumParameter(Root, Root.Content, ByteOffset + 2774 + osc*(3240 - 2774) + zone*(2796 - 2774), 1, 0,
+                new List<string> {"Off", "MS", "Wave Sequence"}, this).Value;
         }
 
 
@@ -136,36 +134,36 @@ namespace PcgTools.Model.KronosSpecific.Synth
             switch (name)
             {
                 case ParameterNames.ProgramParameterName.OscMode: // In the documentation called fully Oscillator Mode
-                    parameter = EnumParameter.Instance.Set(Root, Root.Content, ByteOffset + 2558, 2, 0,
+                    parameter = new EnumParameter(Root, Root.Content, ByteOffset + 2558, 2, 0,
                         new List<string> {"Single", "Double", "Drums", "- (EXI)", "- (Unused)", "Double Drums"}, this);
                     break;
 
                 case ParameterNames.ProgramParameterName.Category:
-                    parameter = IntParameter.Instance.Set(Root, Root.Content, ByteOffset + 2568, 4, 0, false, this);
+                    parameter = new IntParameter(Root, Root.Content, ByteOffset + 2568, 4, 0, false, this);
                     break;
 
                 case ParameterNames.ProgramParameterName.SubCategory:
-                    parameter = IntParameter.Instance.Set(Root, Root.Content, ByteOffset + 2568, 7, 5, false, this);
+                    parameter = new IntParameter(Root, Root.Content, ByteOffset + 2568, 7, 5, false, this);
                     break;
 
                 case ParameterNames.ProgramParameterName.Favorite:
-                    parameter = BoolParameter.Instance.Set(Root, Root.Content, ByteOffset + 2558, 5, this);
+                    parameter = new BoolParameter(Root, Root.Content, ByteOffset + 2558, 5, this);
                     break;
 
                 case ParameterNames.ProgramParameterName.DrumTrackCommonPatternNumber:
-                    parameter = WordParameter.Instance.Set(Root, Root.Content, ByteOffset + 1292, true, 1, this);
+                    parameter = new WordParameter(Root, Root.Content, ByteOffset + 1292, true, 1, this);
                     break;
 
                 case ParameterNames.ProgramParameterName.DrumTrackCommonPatternBank:
-                    parameter = IntParameter.Instance.Set(Root, Root.Content, ByteOffset + 1294, 1, 0, false, this);
+                    parameter = new IntParameter(Root, Root.Content, ByteOffset + 1294, 1, 0, false, this);
                     break;
 
                 case ParameterNames.ProgramParameterName.DrumTrackProgramNumber:
-                    parameter = IntParameter.Instance.Set(Root, Root.Content, ByteOffset + 2688, 7, 0, false, this);
+                    parameter = new IntParameter(Root, Root.Content, ByteOffset + 2688, 7, 0, false, this);
                     break;
 
                 case ParameterNames.ProgramParameterName.DrumTrackProgramBank:
-                    parameter = IntParameter.Instance.Set(Root, Root.Content, ByteOffset + 2689, 7, 0, false, this);
+                    parameter = new IntParameter(Root, Root.Content, ByteOffset + 2689, 7, 0, false, this);
                     break;
 
                 default:
@@ -265,7 +263,6 @@ namespace PcgTools.Model.KronosSpecific.Synth
             IWaveSequence waveSequence = null;
             if (GetZoneMsType(osc, zone) == EMode.WaveSequence)
             {
-                var parameter = new IntParameter();
                 var waveSequenceByteOffset = GetZoneMsByteOffset(osc, zone);
                 int bankIndex;
                 int patchIndex;
@@ -275,21 +272,18 @@ namespace PcgTools.Model.KronosSpecific.Synth
                 {
                     case Models.EOsVersion.EOsVersionKronos10_11: // FALL THROUGH
                     case Models.EOsVersion.EOsVersionKronos15_16:
-                        parameter.Set(Root, Root.Content, waveSequenceByteOffset + 16, 1, 0, false, this);
-                        bankIndex = parameter.Value;
+                        bankIndex = new IntParameter(Root, Root.Content, waveSequenceByteOffset + 16, 1, 0, false, this).Value;
                         if (bankIndex >= 0x40)
                         {
                             bankIndex -= 0x40; // 40..46.. U-A..U-G
                         }
-                        parameter.Set(Root, Root.Content, waveSequenceByteOffset + 17, 1, 0, false, this);
-                        patchIndex = parameter.Value;
+                        patchIndex = new IntParameter(Root, Root.Content, waveSequenceByteOffset + 17, 1, 0, false, this).Value;
                         waveSequence = (IWaveSequence) PcgRoot.WaveSequenceBanks[bankIndex].Patches[patchIndex];
                         break;
 
                     case Models.EOsVersion.EOsVersionKronos2x: // FALL THROUGH
                     case Models.EOsVersion.EOsVersionKronos3x:
-                        parameter.Set(Root, Root.Content, waveSequenceByteOffset + 16, 2, 0, false, this);
-                        int waveSequenceIndex = parameter.Value;
+                        int waveSequenceIndex = new IntParameter(Root, Root.Content, waveSequenceByteOffset + 16, 2, 0, false, this).Value;
 
                         GetWaveSequenceIndices(waveSequenceIndex, out bankIndex, out patchIndex);
                         waveSequence = (IWaveSequence) PcgRoot.WaveSequenceBanks[bankIndex].Patches[patchIndex];
@@ -315,9 +309,7 @@ namespace PcgTools.Model.KronosSpecific.Synth
             var offset = ByteOffset + 2774 + osc*(3240 - 2774) +
                          zone*(2796 - 2774);
 
-            var parameter = new IntParameter();
-            parameter.Set(Root, Root.Content, offset, 1, 0, false, null);
-            int value = parameter.Value;
+            int value = new IntParameter(Root, Root.Content, offset, 1, 0, false, null).Value;
             EMode mode;
             switch (value)
             {
@@ -401,8 +393,6 @@ namespace PcgTools.Model.KronosSpecific.Synth
         /// <param name="waveSequence"></param>
         public override void SetWaveSequence(int osc, int zone, IWaveSequence waveSequence)
         {
-            IntParameter parameter = new IntParameter();
-
             // ReSharper disable once SwitchStatementMissingSomeCases
             switch (PcgRoot.Model.OsVersion)
             {
@@ -414,17 +404,13 @@ namespace PcgTools.Model.KronosSpecific.Synth
                         bankIndex -= 0x40; // 40..46.. U-A..U-G
                     }
 
-                    parameter.Set(Root, Root.Content, GetZoneMsByteOffset(osc, zone) + 1, 7, 0, false, this);
-                    parameter.Value = bankIndex;
-
-                    parameter.Set(Root, Root.Content, GetZoneMsByteOffset(osc, zone) + 2, 7, 0, false, this);
-                    parameter.Value = waveSequence.Index;
+                    new IntParameter(Root, Root.Content, GetZoneMsByteOffset(osc, zone) + 1, 7, 0, false, this).Value = bankIndex;
+                    new IntParameter(Root, Root.Content, GetZoneMsByteOffset(osc, zone) + 2, 7, 0, false, this).Value = waveSequence.Index;
                     break;
 
                 case Models.EOsVersion.EOsVersionKronos2x: // FALL THROUGH
                 case Models.EOsVersion.EOsVersionKronos3x:
-                    parameter.SetMultiBytes(Root, Root.Content, GetZoneMsByteOffset(osc, zone), 2, false, false, null);
-                    parameter.Value = GetWaveSequenceIndex(waveSequence);
+                    new IntParameter(Root, Root.Content, GetZoneMsByteOffset(osc, zone), 2, false, false, null).Value = GetWaveSequenceIndex(waveSequence);
                     break;
 
                 default:

@@ -109,8 +109,7 @@ namespace PcgTools.Model.M3rSpecific.Synth
             switch (name)
             {
                 case "Category":
-                    parameter = new FixedParameter();
-                    ((FixedParameter)parameter).Set(Root, Root.Content, FixedParameter.EType.Category, this);
+                    parameter = new FixedParameter(Root, Root.Content, FixedParameter.EType.Category, this);
                     break;
 
                 default:

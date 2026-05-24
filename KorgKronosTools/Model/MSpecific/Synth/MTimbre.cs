@@ -1,4 +1,4 @@
-﻿// (c) Copyright 2011-2019 MiKeSoft, Michel Keijzers, All rights reserved
+// (c) Copyright 2011-2019 MiKeSoft, Michel Keijzers, All rights reserved
 
 using System.Collections.Generic;
 
@@ -37,50 +37,50 @@ namespace PcgTools.Model.MSpecific.Synth
             switch (name)
             {
                 case ParameterNames.TimbreParameterName.Status:
-                    parameter = EnumParameter.Instance.Set(
+                    parameter = new EnumParameter(
                         Root, Root.Content, TimbresOffset + 2, 7, 5,
                         new List<string> {"Off", "Int", "Ext", "Ex2"}, Parent as IPatch);
                     break;
 
                 case ParameterNames.TimbreParameterName.Mute:
-                    parameter = BoolParameter.Instance.Set(Root, Root.Content, TimbresOffset + 27, 7,
+                    parameter = new BoolParameter(Root, Root.Content, TimbresOffset + 27, 7,
                         Parent as IPatch);
                     break;
 
                 case ParameterNames.TimbreParameterName.TopKey:
-                    parameter = IntParameter.Instance.Set(Root, Root.Content, TimbresOffset + 30, 7, 0, false,
+                    parameter = new IntParameter(Root, Root.Content, TimbresOffset + 30, 7, 0, false,
                         Parent as IPatch);
                     break;
 
                 case ParameterNames.TimbreParameterName.BottomKey:
-                    parameter = IntParameter.Instance.Set(Root, Root.Content, TimbresOffset + 31, 7, 0, false,
+                    parameter = new IntParameter(Root, Root.Content, TimbresOffset + 31, 7, 0, false,
                         Parent as IPatch);
                     break;
 
                 case ParameterNames.TimbreParameterName.TopVelocity:
-                    parameter = IntParameter.Instance.Set(Root, Root.Content, TimbresOffset + 33, 7, 0, false,
+                    parameter = new IntParameter(Root, Root.Content, TimbresOffset + 33, 7, 0, false,
                         Parent as IPatch);
                     break;
 
                 case ParameterNames.TimbreParameterName.BottomVelocity:
-                    parameter = IntParameter.Instance.Set(Root, Root.Content, TimbresOffset + 34, 7, 0, false,
+                    parameter = new IntParameter(Root, Root.Content, TimbresOffset + 34, 7, 0, false,
                         Parent as IPatch);
                     break;
 
                 case ParameterNames.TimbreParameterName.OscMode:
-                    parameter = EnumParameter.Instance.Set(
+                    parameter = new EnumParameter(
                         Root, Root.Content, TimbresOffset + 28, 1, 0,
                         new List<string> {"Prg", "Poly", "Mono", "Legato"}, Parent as IPatch);
                     break;
 
                 case ParameterNames.TimbreParameterName.OscSelect:
-                    parameter = EnumParameter.Instance.Set(
+                    parameter = new EnumParameter(
                         Root, Root.Content, TimbresOffset + 28, 3, 2,
                         new List<string> {"Both", "Osc1", "Osc2"}, Parent as IPatch);
                     break;
 
                 case ParameterNames.TimbreParameterName.Portamento:
-                    parameter = IntParameter.Instance.Set(Root, Root.Content, TimbresOffset + 29, 7, 0, true,
+                    parameter = new IntParameter(Root, Root.Content, TimbresOffset + 29, 7, 0, true,
                         Parent as IPatch);
                     break;
 

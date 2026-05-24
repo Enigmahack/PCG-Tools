@@ -110,10 +110,8 @@ namespace PcgTools.Model.KronosOasysSpecific.Synth
         /// <returns></returns>
         protected IDrumKit GetUsedDrumKit(int osc, int zone)
         {
-            var parameter = new IntParameter();
-            parameter.SetMultiBytes(Root, Root.Content, GetZoneMsByteOffset(osc, zone) + 2, 2, // + 2: Number (bank unused, always 0?)
-                false, false, null);
-            int index = parameter.Value;
+            int index = new IntParameter(Root, Root.Content, GetZoneMsByteOffset(osc, zone) + 2, 2, // + 2: Number (bank unused, always 0?)
+                false, false, null).Value;
 
             IDrumKit drumKit = null;
             if (PcgRoot.DrumKitBanks != null)
@@ -134,14 +132,11 @@ namespace PcgTools.Model.KronosOasysSpecific.Synth
         /// <returns></returns>
         private void SetUsedDrumKit(int osc, int zone, IDrumKit drumKit)
         {
-            var parameter = new IntParameter();
-            parameter.SetMultiBytes(Root, Root.Content, GetZoneMsByteOffset(osc, zone) + 2, 2, // + 2: Number (bank unused, alwyas 0?)
-                false, false, null);
-
             var index = PcgRoot.DrumKitBanks.FindIndexOf(drumKit);
             if (index >= 0)
             {
-                parameter.Value = index;
+                new IntParameter(Root, Root.Content, GetZoneMsByteOffset(osc, zone) + 2, 2, // + 2: Number (bank unused, always 0?)
+                    false, false, null).Value = index;
             }
         }
 

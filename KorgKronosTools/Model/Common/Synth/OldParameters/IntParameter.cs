@@ -1,4 +1,4 @@
-﻿// (c) Copyright 2011-2019 MiKeSoft, Michel Keijzers, All rights reserved
+// (c) Copyright 2011-2019 MiKeSoft, Michel Keijzers, All rights reserved
 
 using System;
 using System.Collections.Generic;
@@ -10,94 +10,67 @@ using PcgTools.Model.Common.Synth.Meta;
 namespace PcgTools.Model.Common.Synth.OldParameters
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public class IntParameter : Parameter
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         private int _highBit;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         private int _lowBit;
 
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         private int _nrOfBytes;
 
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         private bool _msbToLsb;
 
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         private bool _signed;
 
 
         /// <summary>
-        /// 
+        /// Single-byte constructor.
         /// </summary>
-        private static IntParameter _instance;
-
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public static IntParameter Instance => _instance ?? (_instance = new IntParameter());
-
-
-        /// <summary>
-        /// Set for single byte.
-        /// </summary>
-        /// <param name="memory"></param>
-        /// <param name="pcgData"></param>
-        /// <param name="pcgOffsetStart"></param>
-        /// <param name="highBit"></param>
-        /// <param name="lowBit"></param>
-        /// <param name="signed"></param>
-        /// <param name="patch"></param>
-        /// <returns></returns>
-        public IntParameter Set(
+        public IntParameter(
             IMemory memory, byte[] pcgData, int pcgOffsetStart, int highBit, int lowBit, bool signed, IPatch patch)
         {
             Set(memory, pcgData, pcgOffsetStart, patch);
-
             _nrOfBytes = 1;
             _highBit = highBit;
             _lowBit = lowBit;
             _msbToLsb = true;
             _signed = signed;
-
-            return this;
         }
 
 
         /// <summary>
-        /// Set for bits over multiple bytes where the byes are in order MSB to LSB.
+        /// Multi-byte constructor (currently supports nrOfBytes == 2 only).
         /// </summary>
-        /// <returns></returns>
-        public IntParameter SetMultiBytes(
+        public IntParameter(
             IMemory memory, byte[] pcgData, int pcgOffsetStart, int nrOfBytes, bool msbToLsb, bool signed, IPatch patch)
         {
             Set(memory, pcgData, pcgOffsetStart, patch);
-
             Debug.Assert(nrOfBytes == 2);
             _nrOfBytes = nrOfBytes;
             _highBit = 7;
             _lowBit = 0;
             _msbToLsb = msbToLsb;
             _signed = signed;
-
-            return this;
         }
 
 
@@ -161,7 +134,7 @@ namespace PcgTools.Model.Common.Synth.OldParameters
 
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <returns></returns>
         private int GetTwoBytesValue()
@@ -189,7 +162,7 @@ namespace PcgTools.Model.Common.Synth.OldParameters
 
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         private void SetTwoBytesValue(int value)
         {
@@ -204,7 +177,7 @@ namespace PcgTools.Model.Common.Synth.OldParameters
 
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="byteArray"></param>
         // ReSharper disable once UnusedMember.Local

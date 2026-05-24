@@ -1,4 +1,4 @@
-﻿// (c) Copyright 2011-2019 MiKeSoft, Michel Keijzers, All rights reserved
+// (c) Copyright 2011-2019 MiKeSoft, Michel Keijzers, All rights reserved
 
 using System.Collections.Generic;
 using PcgTools.Model.Common.Synth.Meta;
@@ -44,12 +44,12 @@ namespace PcgTools.Model.TrinitySpecific.Synth
             switch (name)
             {
                 case ParameterNames.ProgramParameterName.OscMode:
-                    parameter = EnumParameter.Instance.Set(Root, Root.Content, ByteOffset + 17, 1, 0,
+                    parameter = new EnumParameter(Root, Root.Content, ByteOffset + 17, 1, 0,
                         new List<string> { "Single", "Double", "Drums" }, this);
                     break;
 
                 case ParameterNames.ProgramParameterName.Category:
-                    parameter = IntParameter.Instance.Set(PcgRoot, PcgRoot.Content, ByteOffset + 16, 
+                    parameter = new IntParameter(PcgRoot, PcgRoot.Content, ByteOffset + 16, 
                         Settings.Default.TrinityCategorySetA ? 3 : 7, 
                         Settings.Default.TrinityCategorySetA ? 0 : 4, 
                         false, this); 

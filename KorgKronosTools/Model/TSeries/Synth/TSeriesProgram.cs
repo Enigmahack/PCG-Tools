@@ -1,4 +1,4 @@
-﻿// (c) Copyright 2011-2019 MiKeSoft, Michel Keijzers, All rights reserved
+// (c) Copyright 2011-2019 MiKeSoft, Michel Keijzers, All rights reserved
 
 using System;
 using System.Collections.Generic;
@@ -105,13 +105,12 @@ namespace PcgTools.Model.TSeries.Synth
             switch (name)
             {
                 case ParameterNames.ProgramParameterName.OscMode:
-                    parameter = EnumParameter.Instance.Set(Root, Root.Content, ByteOffset + 10, 2, 0,
+                    parameter = new EnumParameter(Root, Root.Content, ByteOffset + 10, 2, 0,
                         new List<string> { "Single", "Double", "Drums" }, this);
                     break;
 
                 case ParameterNames.ProgramParameterName.Category:
-                    parameter = new FixedParameter();
-                    ((FixedParameter)parameter).Set(PcgRoot, PcgRoot.Content, FixedParameter.EType.Category, this);
+                    parameter = new FixedParameter(PcgRoot, PcgRoot.Content, FixedParameter.EType.Category, this);
                     break;
 
                 default:

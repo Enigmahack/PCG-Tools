@@ -1,4 +1,4 @@
-﻿// (c) Copyright 2011-2019 MiKeSoft, Michel Keijzers, All rights reserved
+// (c) Copyright 2011-2019 MiKeSoft, Michel Keijzers, All rights reserved
 
 
 using PcgTools.Model.Common.Synth.OldParameters;
@@ -44,15 +44,15 @@ namespace PcgTools.Model.Kross2Specific.Synth
             switch (name)
             {
             case ParameterNames.CombiParameterName.Category:
-                    parameter = IntParameter.Instance.Set(Root, Root.Content, ByteOffset + 1268, 4, 0, false, this);
+                    parameter = new IntParameter(Root, Root.Content, ByteOffset + 1268, 4, 0, false, this);
                 break;
 
             case ParameterNames.CombiParameterName.SubCategory:
-                parameter = IntParameter.Instance.Set(Root, Root.Content, ByteOffset + 1268, 7, 5, false, this);
+                parameter = new IntParameter(Root, Root.Content, ByteOffset + 1268, 7, 5, false, this);
                 break;
 
             case ParameterNames.CombiParameterName.Tempo:
-                parameter = WordParameter.Instance.Set(Root, Root.Content, ByteOffset + 792, false, 100, this);
+                parameter = new WordParameter(Root, Root.Content, ByteOffset + 792, false, 100, this);
                 break;
 
             default:

@@ -1,4 +1,4 @@
-﻿// (c) Copyright 2011-2019 MiKeSoft, Michel Keijzers, All rights reserved
+// (c) Copyright 2011-2019 MiKeSoft, Michel Keijzers, All rights reserved
 
 
 using System;
@@ -46,16 +46,16 @@ namespace PcgTools.Model.OasysSpecific.Synth
             switch (name)
             {
                 case ParameterNames.ProgramParameterName.OscMode:
-                    parameter = EnumParameter.Instance.Set(Root, Root.Content, ByteOffset + 2546, 1, 0,
+                    parameter = new EnumParameter(Root, Root.Content, ByteOffset + 2546, 1, 0,
                         new List<string> { "Single", "Double", "Drums", "- (EXI)", "- (Unused)", "Double Drums" }, this);
                     break;
 
                 case ParameterNames.ProgramParameterName.Category:
-                    parameter = IntParameter.Instance.Set(PcgRoot, PcgRoot.Content, ByteOffset + 2556, 4, 0, false, this);
+                    parameter = new IntParameter(PcgRoot, PcgRoot.Content, ByteOffset + 2556, 4, 0, false, this);
                     break;
 
                 case ParameterNames.ProgramParameterName.SubCategory:
-                    parameter = IntParameter.Instance.Set(PcgRoot, PcgRoot.Content, ByteOffset + 2556, 7, 5, false, this);
+                    parameter = new IntParameter(PcgRoot, PcgRoot.Content, ByteOffset + 2556, 7, 5, false, this);
                     break;
 
                 default:

@@ -106,7 +106,19 @@
             </StackPanel>
         </Border>
 
-
+        <!-- Defrag progress indicator -->
+        <Border DockPanel.Dock="Bottom"
+                Background="{StaticResource Brush.Surface2}"
+                BorderBrush="{StaticResource Brush.Border}"
+                BorderThickness="0,1,0,0"
+                Padding="8,4"
+                Visibility="{Binding IsDefragRunning, Converter={StaticResource BoolToVisibilityConverter}}">
+            <StackPanel Orientation="Horizontal">
+                <ProgressBar IsIndeterminate="True" Width="120" Height="12" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding DefragStatusText}" VerticalAlignment="Center"
+                           Foreground="{StaticResource Brush.TextSecondary}" FontSize="11"/>
+            </StackPanel>
+        </Border>
 
         <Grid HorizontalAlignment="Left">
             <ListView HorizontalAlignment="Left" Margin="4" Name="listViewBanks" SelectionMode="Extended" 

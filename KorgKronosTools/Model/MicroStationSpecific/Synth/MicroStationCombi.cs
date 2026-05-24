@@ -1,4 +1,4 @@
-﻿// (c) Copyright 2011-2019 MiKeSoft, Michel Keijzers, All rights reserved
+// (c) Copyright 2011-2019 MiKeSoft, Michel Keijzers, All rights reserved
 
 using PcgTools.Model.Common.Synth.OldParameters;
 using PcgTools.Model.Common.Synth.PatchCombis;
@@ -43,11 +43,11 @@ namespace PcgTools.Model.MicroStationSpecific.Synth
             switch (name)
             {
                 case ParameterNames.CombiParameterName.Category:
-                    parameter = IntParameter.Instance.Set(PcgRoot, PcgRoot.Content, ByteOffset + 652, 4, 0, false, this);
+                    parameter = new IntParameter(PcgRoot, PcgRoot.Content, ByteOffset + 652, 4, 0, false, this);
                     break;
 
                 case ParameterNames.CombiParameterName.SubCategory:
-                    parameter = IntParameter.Instance.Set(PcgRoot, PcgRoot.Content, ByteOffset + 652, 7, 5, false, this);
+                    parameter = new IntParameter(PcgRoot, PcgRoot.Content, ByteOffset + 652, 7, 5, false, this);
                     break;
 
                 default:
