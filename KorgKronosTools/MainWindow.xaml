@@ -101,6 +101,10 @@
                               Style="{StaticResource menuItemWithCommand}"
                               ToolTip="{Binding DefragSelected, Source={StaticResource LocStrings}}"
                               Command="{Binding Path=CurrentChildViewModel.DefragCommand}"/>
+                    <MenuItem Header="{Binding StripAndCompress, Source={StaticResource LocStrings}}"
+                              Style="{StaticResource menuItemWithCommand}"
+                              ToolTip="{Binding StripAndCompressSelected, Source={StaticResource LocStrings}}"
+                              Command="{Binding Path=CurrentChildViewModel.StripAndCompressCommand}"/>
                     <MenuItem Header="{Binding Sort_menu, Source={StaticResource LocStrings}}" 
                               Style="{StaticResource menuItemWithCommand}" 
                                 Command="{Binding Path=CurrentChildViewModel.SortCommand}"/>

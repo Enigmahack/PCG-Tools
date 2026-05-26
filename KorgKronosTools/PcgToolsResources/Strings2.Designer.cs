@@ -1195,6 +1195,42 @@ namespace PcgTools.PcgToolsResources {
         }
 
         /// <summary>
+        ///   Looks up a localized string similar to _Strip and Compress.
+        /// </summary>
+        public static string StripAndCompress {
+            get {
+                return ResourceManager.GetString("StripAndCompress", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Remove programs not referenced by any combi or setlist, then compact banks.
+        /// </summary>
+        public static string StripAndCompressSelected {
+            get {
+                return ResourceManager.GetString("StripAndCompressSelected", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to A Strip and Compress operation is currently in progress. Please wait until it completes before making changes.
+        /// </summary>
+        public static string StripAndCompressInProgress {
+            get {
+                return ResourceManager.GetString("StripAndCompressInProgress", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Include combis (strip unreferenced combis too).
+        /// </summary>
+        public static string StripAndCompressIncludeCombis {
+            get {
+                return ResourceManager.GetString("StripAndCompressIncludeCombis", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to Compact.
         /// </summary>
         public static string CompactList {

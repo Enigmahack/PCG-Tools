@@ -118,7 +118,8 @@ namespace PcgTools
             WindowLoadedClearPatches();
 
             CheckBoxFixReferencesToClearedUsedPatches.IsChecked = Settings.Default.UI_ClearPatchesFixReferences;
-            
+            CheckBoxStripAndCompressIncludeCombis.IsChecked = Settings.Default.UI_StripAndCompressIncludeCombis;
+
             // Load file settings.
             WindowLoadedAutoBackupFiles();
             
@@ -683,6 +684,7 @@ namespace PcgTools
                             : (int) ClearCommands.ClearPatchesAlgorithm.UnusedAndUsed;
 
             Settings.Default.UI_ClearPatchesFixReferences = CheckBoxFixReferencesToClearedUsedPatches.IsReallyChecked();
+            Settings.Default.UI_StripAndCompressIncludeCombis = CheckBoxStripAndCompressIncludeCombis.IsReallyChecked();
         }
 
 

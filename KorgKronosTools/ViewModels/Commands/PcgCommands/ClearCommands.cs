@@ -181,6 +181,58 @@ namespace PcgTools.ViewModels.Commands.PcgCommands
 
 
         /// <summary>
+        /// Clear programs that have zero references (not used by any combi or set list).
+        /// </summary>
+        /// <param name="programs">All program patches to evaluate across all banks.</param>
+        /// <returns>Number of programs stripped.</returns>
+        internal int StripUnusedPrograms(List<IPatch> programs)
+        {
+            var stripped = 0;
+            foreach (var patch in programs)
+            {
+                var referencable = patch as IReferencable;
+                var program = patch as Program;
+                var isFavorite = program != null && !string.IsNullOrEmpty(program.Favorite);
+                if (!patch.IsEmptyOrInit &&
+                    referencable != null &&
+                    referencable.NumberOfReferences == 0 &&
+                    !isFavorite)
+                {
+                    patch.Clear();
+                    stripped++;
+                }
+            }
+            return stripped;
+        }
+
+
+        /// <summary>
+        /// Clear combis that have zero references (not used by any set list slot).
+        /// </summary>
+        /// <param name="combis">All combi patches to evaluate across all banks.</param>
+        /// <returns>Number of combis stripped.</returns>
+        internal int StripUnusedCombis(List<IPatch> combis)
+        {
+            var stripped = 0;
+            foreach (var patch in combis)
+            {
+                var referencable = patch as IReferencable;
+                var combi = patch as Combi;
+                var isFavorite = combi != null && !string.IsNullOrEmpty(combi.Favorite);
+                if (!patch.IsEmptyOrInit &&
+                    referencable != null &&
+                    referencable.NumberOfReferences == 0 &&
+                    !isFavorite)
+                {
+                    patch.Clear();
+                    stripped++;
+                }
+            }
+            return stripped;
+        }
+
+
+        /// <summary>
         /// Clear duplicates only.
         /// </summary>
         /// <param name="pcgViewModel"></param>

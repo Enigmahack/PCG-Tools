@@ -277,6 +277,22 @@
     <value>A defrag is currently in progress. Please wait until it completes before making changes.</value>
     <comment>Warning shown when user tries to Cut/Copy/Paste/MoveUp/MoveDown during defrag</comment>
   </data>
+  <data name="StripAndCompress" xml:space="preserve">
+    <value>_Strip and Compress</value>
+    <comment>Strip and Compress menu item: remove unreferenced programs then compact across all banks</comment>
+  </data>
+  <data name="StripAndCompressSelected" xml:space="preserve">
+    <value>Remove programs not referenced by any combi or setlist, then compact banks</value>
+    <comment>Tool tip for Strip and Compress</comment>
+  </data>
+  <data name="StripAndCompressInProgress" xml:space="preserve">
+    <value>A Strip and Compress operation is currently in progress. Please wait until it completes before making changes.</value>
+    <comment>Warning shown when user tries to Cut/Copy/Paste/MoveUp/MoveDown during strip and compress</comment>
+  </data>
+  <data name="StripAndCompressIncludeCombis" xml:space="preserve">
+    <value>Include combis (strip unreferenced combis too)</value>
+    <comment>Checkbox label in Settings for Strip and Compress option</comment>
+  </data>
   <data name="CompactSelected" xml:space="preserve">
     <value>Compact the selected patch(es) or bankPcgId(s)</value>
     <comment>Tool tip</comment>

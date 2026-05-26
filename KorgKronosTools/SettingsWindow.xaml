@@ -36,9 +36,14 @@
                                         Margin="4"/>
                         </StackPanel>
                     </GroupBox>
+                    <GroupBox Header="{Binding StripAndCompress, Source={StaticResource LocStrings}}" Margin="4">
+                        <CheckBox x:Name="CheckBoxStripAndCompressIncludeCombis"
+                                  Content="{Binding StripAndCompressIncludeCombis, Source={StaticResource LocStrings}}"
+                                  Margin="4"/>
+                    </GroupBox>
                 </StackPanel>
             </TabItem>
-            
+
             <TabItem Header="{Binding Files, Source={StaticResource LocStrings}}">
                 <StackPanel>
                     <GroupBox Header="{Binding AutoBackupFiles, Source={StaticResource LocStrings}}">

@@ -3644,6 +3644,133 @@ namespace PcgTools.ViewModels
         /// <summary>
         ///
         /// </summary>
+        ICommand _stripAndCompressCommand;
+
+
+        /// <summary>
+        ///
+        /// </summary>
+        [UsedImplicitly]
+        // ReSharper disable once UnusedMember.Global
+        public ICommand StripAndCompressCommand
+        {
+            get
+            {
+                return _stripAndCompressCommand ?? (_stripAndCompressCommand = new RelayCommand(
+                    param => StripAndCompress(),
+                    param => CanExecuteStripAndCompressCommand));
+            }
+        }
+
+
+        /// <summary>
+        ///
+        /// </summary>
+        private bool CanExecuteStripAndCompressCommand =>
+            (SelectedPcgMemory != null) &&
+            (!PcgClipBoard.PasteDuplicatesExecuted || PcgClipBoard.IsEmpty) &&
+            !IsDefragRunning;
+
+
+        /// <summary>
+        /// Removes programs with zero references (not used by any combi or set list), then compacts
+        /// each synthesis-type bank group so empty slots move to the end and earlier banks fill first.
+        /// </summary>
+        private async void StripAndCompress()
+        {
+            var includeCombis = Settings.Default.UI_StripAndCompressIncludeCombis &&
+                                SelectedPcgMemory.CombiBanks != null;
+
+            var confirmText = includeCombis
+                ? "Strip and Compress will permanently remove all unreferenced programs and combis " +
+                  "(those not used by any combi, set list, or song) from all banks, then compact " +
+                  "the remaining patches to fill gaps.\n\n" +
+                  "Favorited programs and combis are always preserved.\n\n" +
+                  "This operation may take a while on large files and cannot be undone.\n\n" +
+                  "Do you want to proceed?"
+                : "Strip and Compress will permanently remove all unreferenced programs " +
+                  "(those not used by any combi or set list) from all banks, then compact " +
+                  "the remaining patches to fill gaps.\n\n" +
+                  "Favorited programs are always preserved.\n\n" +
+                  "This operation may take a while on large files and cannot be undone.\n\n" +
+                  "Do you want to proceed?";
+
+            var confirmed = ShowMessageBox(
+                confirmText,
+                Strings.PcgTools,
+                WindowUtils.EMessageBoxButton.YesNo,
+                WindowUtils.EMessageBoxImage.Warning,
+                WindowUtils.EMessageBoxResult.No);
+
+            if (confirmed != WindowUtils.EMessageBoxResult.Yes)
+            {
+                return;
+            }
+
+            SetCursor(WindowUtils.ECursor.Wait);
+            IsDefragRunning = true;
+            var programsStripped = 0;
+            var combisStripped = 0;
+
+            try
+            {
+                var allPrograms = SelectedPcgMemory.ProgramBanks.BankCollection
+                    .Cast<IBank>()
+                    .Where(bank => bank.Type != BankType.EType.Gm && bank.IsLoaded)
+                    .SelectMany(bank => bank.Patches)
+                    .ToList();
+
+                DefragStatusText = "Stripping unreferenced programs...";
+                programsStripped = await Task.Run(() => _clearCommands.StripUnusedPrograms(allPrograms));
+
+                if (includeCombis)
+                {
+                    var allCombis = SelectedPcgMemory.CombiBanks.BankCollection
+                        .Cast<IBank>()
+                        .Where(bank => bank.Type != BankType.EType.Gm && bank.IsLoaded)
+                        .SelectMany(bank => bank.Patches)
+                        .ToList();
+
+                    DefragStatusText = "Stripping unreferenced combis...";
+                    combisStripped = await Task.Run(() => _clearCommands.StripUnusedCombis(allCombis));
+                }
+
+                DefragStatusText = "Compressing programs...";
+                var programLists = BuildDefragProgramProcessList().ToList();
+                await Task.Run(() => { foreach (var list in programLists) CompactList(list); });
+
+                if (includeCombis)
+                {
+                    DefragStatusText = "Compressing combis...";
+                    var combiList = BuildDefragCombiProcessList();
+                    if (combiList.Count > 0)
+                        await Task.Run(() => CompactList(combiList));
+                }
+            }
+            finally
+            {
+                IsDefragRunning = false;
+                SetCursor(WindowUtils.ECursor.Arrow);
+            }
+
+            UpdateTimbresWindows();
+
+            var summary = $"Strip and Compress complete.\n\nUnreferenced programs removed: {programsStripped}";
+            if (includeCombis)
+                summary += $"\nUnreferenced combis removed: {combisStripped}";
+
+            ShowMessageBox(
+                summary,
+                Strings.PcgTools,
+                WindowUtils.EMessageBoxButton.Ok,
+                WindowUtils.EMessageBoxImage.Information,
+                WindowUtils.EMessageBoxResult.Ok);
+        }
+
+
+        /// <summary>
+        ///
+        /// </summary>
         ICommand _showTimbresCommand;
 
 

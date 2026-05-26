@@ -910,7 +910,19 @@ namespace PcgTools.Properties {
                 this["UI_ClearPatchesFixReferences"] = value;
             }
         }
-        
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool UI_StripAndCompressIncludeCombis {
+            get {
+                return ((bool)(this["UI_StripAndCompressIncludeCombis"]));
+            }
+            set {
+                this["UI_StripAndCompressIncludeCombis"] = value;
+            }
+        }
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
